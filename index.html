@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poorna Market Pedestrianization VR</title>
+  
+  <!-- A-Frame WebXR Framework: Specifically version 1.4.2 (Stable for Quest) -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <!-- Event Set Component: For interactive animations when hovering/gazing -->
+  <script src="https://unpkg.com/aframe-event-set-component@5.0.0/dist/aframe-event-set-component.min.js"></script>
+</head>
+<body>
+
+  <!-- ================================================================= -->
+  <!-- A-FRAME VR SCENE -->
+  <!-- ================================================================= -->
+  <a-scene webxr="optionalFeatures: hit-test">
+    
+    <!-- ================================================================= -->
+    <!-- 1. ASSET MANAGEMENT SYSTEM (ASSETS ARE CRITICAL)                   -->
+    <!-- Preload your media here before the scene loads.                     -->
+    <!-- IMPORTANT: Replace the URLs below with your own assets or files. -->
+    <!-- ================================================================= -->
+    <a-assets>
+      <!-- Example Enscape Renders (Equirectangular 360 JPEGs) -->
+      <!-- We use Unsplash URLs as dynamic placeholders; replace these -->
+      <img id="foyerPanorama" src="https://images.unsplash.com/photo-1550976136-1e6a9f77f0a7?q=80&w=2048&auto=format&fit=crop" crossorigin="anonymous">
+      <img id="marketLanePanorama" src="https://images.unsplash.com/photo-1598275529457-b0a7037ce699?q=80&w=2048&auto=format&fit=crop" crossorigin="anonymous">
+      
+      <!-- Placeholder for stylized mini-map texture (from UI concept) -->
+      <img id="miniMapTexture" src="https://images.unsplash.com/photo-1577086664693-894d8405334a?q=80&w=256&auto=format&fit=crop">
+    </a-assets>
+
+    <!-- ================================================================= -->
+    <!-- 2. CAMERA AND INTERACTION RIG                                    -->
+    <!-- Positioned at eye level (1.6m above ground).                    -->
+    <!-- ================================================================= -->
+    <a-entity id="rig" position="0 1.6 0">
+      <a-camera id="camera" look-controls touch-controls>
+        
+        <!-- GAZE RETICLE (The cursor from image_0.png conceptual UI) -->
+        <!-- Interacts with objects having class='clickable' -->
+        <a-cursor
+          id="cursor"
+          animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
+          animation__fusing="property: fusing; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1"
+          event-set__mouseleave="_event: mouseleave; fuse: false"
+          raycaster="objects: .clickable"
+          color="#00e5ff"
+          position="0 0 -1"
+          geometry="primitive: ring; radiusInner: 0.015; radiusOuter: 0.025">
+        </a-cursor>
+
+        <!-- Dynamic Station Location Header (Fixed in FoV, lower safe-zone) -->
+        <a-text 
+          id="hud-title" 
+          value="Station 1: Entry Plaza" 
+          position="0 -0.65 -1.2" 
+          align="center" 
+          color="#FFFFFF" 
+          scale="0.3 0.3 0.3" 
+          geometry="primitive: plane; width: 2.2; height: 0.3" 
+          material="color: #1a1a1a; opacity: 0.7">
+        </a-text>
+
+      </a-camera>
+      
+      <!-- Optional: Add Native Oculus/Meta Quest Controller Support -->
+      <!-- Enables laser-pointer interaction as an alternative to gaze -->
+      <a-entity oculus-touch-controls="hand: left"></a-entity>
+      <a-entity oculus-touch-controls="hand: right"></a-entity>
+    </a-entity>
+
+    <!-- ================================================================= -->
+    <!-- 3. THE 360 BACKGROUND (SKYBOX)                                   -->
+    <!-- Your main Enscape render texture goes here.                    -->
+    <!-- ================================================================= -->
+    <a-sky 
+      id="mainSky" 
+      radius="10" 
+      src="#foyerPanorama" 
+      rotation="0 -90 0"
+      animation__fadeout="property: material.color; type: color; from: #FFF; to: #000; dur: 300; startEvents: fadeout"
+      animation__fadein="property: material.color; type: color; from: #000; to: #FFF; dur: 300; startEvents: fadein">
+    </a-sky>
+
+    <!-- ================================================================= -->
+    <!-- 4. SPATIAL INTERACTIVE ELEMENTS (STATION INTERACTION GROUP)       -->
+    <!-- elements specific to Station 1 (Entry Plaza)                    -->
+    <!-- ================================================================= -->
+    <a-entity id="station-1-group" visible="true">
+      
+      <!-- Navigation Hotspot: A green floor ring to jump to Station 2 -->
+      <a-entity 
+        class="clickable" 
+        position="0 0.05 -5" 
+        onclick="switchScene('#marketLanePanorama', 'Station 2: Pedestrian Corridor')"
+        event-set__mouseenter="_event: mouseenter; scale: 1.2 1.2 1.2"
+        event-set__mouseleave="_event: mouseleave; scale: 1 1 1">
+        <!-- Hotspot Ring Visual -->
+        <a-ring color="#10b981" radius-inner="0.35" radius-outer="0.45" rotation="-90 0 0"></a-ring>
+        <a-circle color="#ffffff" radius="0.34" rotation="-90 0 0" opacity="0.6"></a-circle>
+        <!-- Text Label above hotspot -->
+        <a-text value="Walk to Corridor" align="center" position="0 0.6 0" scale="0.8 0.8 0.8" color="#ffffff"></a-text>
+      </a-entity>
+
+      <!-- Contextual Data Hotspot: Blue pin for drainage details (Image_1.png style) -->
+      <a-entity class="clickable" position="2.5 1.5 -3" onclick="toggleElement('#drainagePanel')">
+        <a-sphere color="#00e5ff" radius="0.15" animation="property: position; dir: alternate; dur: 1000; loop: true; to: 2.5 1.6 -3"></a-sphere>
+        <a-text value="Proposed Bioswale" align="center" position="0 0.35 0" scale="0.6 0.6 0.6" color="#ffffff"></a-text>
+        
+        <!-- The Floating Data Panel (Gaze interaction reveals this) -->
+        <a-plane id="drainagePanel" position="0 1.1 0" width="1.8" height="1" color="#1a1a1a" opacity="0.9" visible="false">
+          <a-text value="Design Element: BIOSWALE\n- Integrated rainwater bio-retention\n- Native planting\n- Reducing surface runoff" align="center" scale="0.35 0.35 0.35" color="#ffffff"></a-text>
+        </a-plane>
+      </a-entity>
+
+      <!-- Minimalist Mini-Map Overlay (Principle of Depth, Image_2.png style) -->
+      <a-plane 
+        id="miniMapPanel"
+        src="#miniMapTexture" 
+        position="-1.8 0.5 -1.5" 
+        rotation="-20 15 0" 
+        width="0.7" height="0.7" 
+        material="transparent: true; opacity: 0.8; depthWrite: false"
+        render-order="999">
+        <a-text value="You are Here:\nPoorna Market Entry" align="center" position="0 -0.45 0" scale="0.25 0.25 0.25" color="#FFFFFF"></a-text>
+      </a-plane>
+      
+    </a-entity>
+
+    <!-- Placeholder for Station 2 Interaction Group -->
+    <a-entity id="station-2-group" visible="false">
+      <!-- You would add return buttons here to Station 1 -->
+    </a-entity>
+
+  </a-scene>
+
+  <!-- ================================================================= -->
+  <!-- JAVASCRIPT LOGIC                                                 -->
+  <!-- ================================================================= -->
+  <script>
+    // 1. Navigation Controller (Teleporting between 360 renders)
+    function switchScene(newPanoId, newTitle) {
+      const sky = document.querySelector('#mainSky');
+      const hudTitle = document.querySelector('#hud-title');
+      
+      // A. Comfort Principle: Fade scene out to prevent motion sickness
+      sky.emit('fadeout');
+      
+      setTimeout(() => {
+        // B. Swap the 360 texture and update HUD title
+        sky.setAttribute('src', newPanoId);
+        hudTitle.setAttribute('value', newTitle);
+        
+        // C. (In a complete project) You would also toggle visibility of interaction groups
+        // document.getElementById('station-1-group').setAttribute('visible', 'false');
+        // document.getElementById('station-2-group').setAttribute('visible', 'true');
+
+        // D. Comfort Principle: Fade scene back in
+        sky.emit('fadein');
+      }, 300); // 300ms transition time
+    }
+
+    // 2. UI Toggle Controller (Contextual panels)
+    function toggleElement(targetId) {
+      const el = document.querySelector(targetId);
+      const isVisible = el.getAttribute('visible');
+      el.setAttribute('visible', !isVisible);
+    }
+  </script>
+</body>
+</html>v
