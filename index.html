@@ -186,14 +186,22 @@
     <!-- Camera Setup & Gaze Reticle for VR Headsets -->
     <a-entity id="rig" position="0 1.6 0">
       <a-camera id="camera" look-controls touch-controls>
-        <!-- Center Gaze Reticle for hands-free VR -->
+        <!-- Subtle Gaze Reticle (hidden by default on desktop, active on hover) -->
         <a-cursor
           id="cursor"
           raycaster="objects: .clickable"
           color="#38bdf8"
+          opacity="0.4"
           position="0 0 -1"
-          geometry="primitive: ring; radiusInner: 0.012; radiusOuter: 0.022">
+          geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.01">
         </a-cursor>
+      </a-camera>
+
+      <!-- VR Controller support for Meta Quest -->
+    <!-- Camera Setup for Web & VR -->
+    <a-entity id="rig" position="0 1.6 0">
+      <a-camera id="camera" look-controls touch-controls>
+        <!-- Blue gaze cursor removed for a clean unobstructed view -->
       </a-camera>
 
       <!-- VR Controller support for Meta Quest -->
@@ -203,13 +211,6 @@
 
     <!-- 360 Panorama Sky Sphere -->
     <a-sky id="mainSky" src="#pano1" material="color: #1e293b" rotation="0 -90 0"></a-sky>
-
-    <!-- 360° Header Indicator Badge in 3D Space (Matching Reference Image) -->
-    <a-entity id="vr360Badge" position="0 2.2 -3" rotation="10 0 0">
-      <a-plane width="0.7" height="0.25" color="#000000" opacity="0.45" radius="0.05">
-        <a-text value="360°" align="center" color="#FFFFFF" scale="0.8 0.8 0.8" position="0 0 0.01"></a-text>
-      </a-plane>
-    </a-entity>
 
     <!-- 3D Spatial Navigation Hotspots (Forward, Left, Right Arrows on Promenade Ground) -->
     <a-entity id="spatialHotspots">
