@@ -1,120 +1,41 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
     <meta charset="utf-8">
-    <title>Poorna Market Urban Design Tour</title>
-    <meta name="description" content="VR Architectural Showcase">
-    <!-- 1. Import A-Frame Framework (version 1.5.0 is stable for Quest 3) -->
+    <title>Poorna Market Thesis - Integrated VR</title>
+    <meta name="description" content="Urban Design VR Showcase">
+    <!-- 1. Import A-Frame Framework (version 1.5.0, stable for Quest) -->
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <!-- Event Set Component: For interactive animations when hovering/gazing -->
+    <!-- Event Set Component: For interactive animations when gazing/clicking -->
     <script src="https://unpkg.com/aframe-event-set-component@5.0.0/dist/aframe-event-set-component.min.js"></script>
-  </head>
-  <body>
-    
+</head>
+<body>
+
     <!-- ========================================================== -->
     <!-- THE A-FRAME VR SCENE -->
     <!-- ========================================================== -->
     <a-scene webxr="optionalFeatures: hit-test">
       
       <!-- ========================================================== -->
-      <!-- 2. ASSET MANAGEMENT SYSTEM (ASSETS ARE CRITICAL) -->
-      <!-- Preload your media here before the scene loads. -->
-      <!-- REPLACE THE URLS BELOW WITH YOUR OWN ASSETS OR FILES. -->
+      <!-- 2. ASSET MANAGEMENT SYSTEM (CRITICAL: Replace URLs below)    -->
+      <!-- Preload your Enscape panoramas and map graphic here.          -->
+      <!-- Use local assets/ paths once you have files on GitHub Pages. -->
       <!-- ========================================================== -->
       <a-assets>
-        <!-- 360 Enscape Panoramas -->
-        <!-- We use Unsplash as placeholers, use assets/pano_main_entry.jpg, etc. -->
+        <!-- A. Enscape Mono 360 Panoramas (8K JPG/PNG) -->
+        <!-- Placing placeholders; replace with local assets/ pano_main_entry.jpg, etc. -->
         <img id="entryNode" src="https://images.unsplash.com/photo-1550976136-1e6a9f77f0a7?q=80&w=2048&auto=format&fit=crop" crossorigin="anonymous">
         <img id="groceryLaneNode" src="https://images.unsplash.com/photo-1598275529457-b0a7037ce699?q=80&w=2048&auto=format&fit=crop" crossorigin="anonymous">
         
-        <!-- Icons (Simplified images for UI console buttons) -->
-        <img id="entryIcon" src="https://images.unsplash.com/photo-1577086664693-894d8405334a?q=80&w=256&auto=format&fit=crop">
-        <img id="mapTex" src="https://images.unsplash.com/photo-1577086664693-894d8405334a?q=80&w=256&auto=format&fit=crop">
+        <!-- B. 2D Mini Map Texture (Simplified urban layout graphic) -->
+        <img id="mapTexture" src="https://images.unsplash.com/photo-1577086664693-894d8405334a?q=80&w=256&auto=format&fit=crop">
       </a-assets>
 
       <!-- ========================================================== -->
-      <!-- 3. CAMERA RIG & INTERACTION -->
-      <!-- Positioned at eye level (1.6m above ground). -->
+      <!-- 3. CAMERA RIG & GAZE INTERACTION (Image 0 & 9 inspired)      -->
+      <!-- Positioned at eye level (1.6m). Reticle is center screen.   -->
       <!-- ========================================================== -->
       <a-entity id="rig" position="0 1.6 0">
         <a-camera id="camera" look-controls>
-          <!-- GAZE RETICLE (The cursor from image_8.png UI concept) -->
-          <!-- Interacts with objects having class='clickable' -->
-          <a-cursor
-            id="cursor"
-            animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
-            animation__fusing="property: fusing; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1"
-            event-set__mouseleave="_event: mouseleave; fuse: false"
-            raycaster="objects: .clickable"
-            color="#FFFFFF">
-          </a-cursor>
-        </a-camera>
-        
-        <!-- Optional: Add Native Oculus/Meta Quest Controller Support -->
-        <a-entity oculus-touch-controls="hand: left"></a-entity>
-        <a-entity oculus-touch-controls="hand: right"></a-entity>
-      </a-entity>
-
-      <!-- ========================================================== -->
-      <!-- 4. THE 360 ENVIRONMENT (SKY BOX) -->
-      <!-- Your main Enscape render texture goes here. -->
-      <!-- ========================================================== -->
-      <a-sky id="image-360" radius="10" src="#entryNode" rotation="0 -90 0"></a-sky>
-
-      <!-- ========================================================== -->
-      <!-- 5. FLOATING UI CONSOLE (Principle of Depth, Image_8.png) -->
-      <!-- Restored at an ergonomic distance. -->
-      <!-- ========================================================== -->
-      <a-entity id="uiConsole" position="0 1.5 -3" rotation="0 0 0">
-        
-        <!-- Panel 1: Mini Map (Image_8.png style) -->
-        <a-plane id="mapPanel" src="#mapTex" position="-1.5 0 0" width="1" height="1" material="transparent: true; opacity: 0.8; depthWrite: false" render-order="999">
-          <a-text value="You are Here:\nMain Entry" align="center" position="0 -0.45 0" scale="0.25 0.25 0.25" color="#FFFFFF"></a-text>
-        </a-plane>
-
-        <!-- Panel 2: Scenes Grid (image_8 style, hexagon buttons) -->
-        <a-entity id="scenesGrid" position="0.8 0 0">
-          
-          <!-- Button 1: Grocery Lane (Clickable Scene Changer) -->
-          <a-entity 
-            id="btnGrocery" 
-            class="clickable" 
-            onclick="switchScene('#groceryLaneNode')" 
-            position="-0.6 0.3 0" 
-            scale="1 1 1"
-            event-set__mouseenter="_event: mouseenter; scale: 1.1 1.1 1"
-            event-set__mouseleave="_event: mouseleave; scale: 1 1 1">
-            <a-circle color="#1a1a1a" radius="0.3" material="opacity: 0.9; depthWrite: false"></a-circle>
-            <a-text value="Grocery" align="center" position="0 0 0.1" scale="0.4 0.4 0.4" color="#FFFFFF"></a-text>
-          </a-entity>
-          
-          <!-- Add more buttons here following the hexagon grid pattern -->
-
-        </a-entity>
-
-      </a-entity>
-
-    </a-scene>
-
-    <!-- Scene Transition Controller -->
-    <script>
-      function switchScene(newImageId) {
-        const sky = document.querySelector('#image-360');
-        
-        // A. Fade background to black transition (prevents motion sickness)
-        sky.setAttribute('animation__fade', 'property: material.color; type: color; from: #FFF; to: #000; dur: 300; startEvents: fadeout');
-        sky.emit('fadeout');
-        
-        setTimeout(() => {
-          // B. Swap the 360 texture
-          sky.setAttribute('src', newImageId);
-          // (Optional) Update the map location dot here
-          
-          // C. Fade background back in
-          sky.setAttribute('animation__fadein', 'property: material.color; type: color; from: #000; to: #FFF; dur: 300; startEvents: fadein');
-          sky.emit('fadein');
-        }, 300);
-      }
-    </script>
-  </head>
-</html>
+          <!-- Gaze Reticle (pulsating cursor) for hands-free interaction -->
+          <!-- It will click elements
