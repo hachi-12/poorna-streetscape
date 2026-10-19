@@ -1,330 +1,449 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Poorna Market - 360 VR Showcase</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poorna Market - Architectural 360 VR Master Plan</title>
   
-  <!-- A-Frame VR Library -->
-  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <!-- Tailwind CSS for UI HUD styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- A-Frame Framework for WebXR & Meta Quest VR -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  
+  <!-- FontAwesome for UI Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    /* Reset & Full Screen Layout */
-    * {
-      box-sizing: border-box;
+    /* Custom Scrollbar for Info Panels */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D4AF37;
+      border-radius: 3px;
+    }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       margin: 0;
-      padding: 0;
-      user-select: none;
-    }
-    body, html {
-      width: 100%;
-      height: 100%;
       overflow: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #000;
+      background-color: #0B0F17;
     }
-
-    /* Top Header Bar */
-    #header-bar {
-      position: absolute;
-      top: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 8px 20px;
-      border-radius: 30px;
-      color: #ffffff;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    /* WebXR Overlay HUD Container */
+    #2d-hud {
       pointer-events: none;
     }
-    #header-bar h1 {
-      font-size: 16px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-    #header-bar p {
-      font-size: 11px;
-      color: #cbd5e1;
-    }
-
-    /* Bottom Thumbnail Navigation Overlay */
-    #ui-container {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-      width: 90%;
-      max-width: 1000px;
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      border-radius: 20px;
-      padding: 12px 16px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-    }
-
-    .thumbnail-scroll {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding-bottom: 4px;
-    }
-
-    /* Scrollbar Styling */
-    .thumbnail-scroll::-webkit-scrollbar {
-      height: 4px;
-    }
-    .thumbnail-scroll::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 4px;
-    }
-
-    .nav-card {
-      flex: 0 0 auto;
-      width: 110px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      transition: transform 0.2s ease, border-color 0.2s ease;
-      border: 2px solid transparent;
-      border-radius: 10px;
-      padding: 4px;
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .nav-card:hover {
-      transform: translateY(-3px);
-      background: rgba(255, 255, 255, 0.12);
-    }
-
-    .nav-card.active {
-      border-color: #38bdf8;
-      background: rgba(56, 189, 248, 0.15);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
-    }
-
-    .nav-card img {
-      width: 100%;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 6px;
-      background-color: #334155;
-    }
-
-    .nav-card span {
-      margin-top: 6px;
-      font-size: 11px;
-      color: #f8fafc;
-      font-weight: 500;
-      text-align: center;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      width: 100%;
-    }
-
-    /* Instructions Overlay helper if image fails */
-    #status-msg {
-      position: absolute;
-      top: 70px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-      background: rgba(239, 68, 68, 0.9);
-      color: white;
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-size: 12px;
-      display: none;
+    #2d-hud * {
+      pointer-events: auto;
     }
   </style>
 </head>
-<body>
+<body class="select-none">
 
-  <!-- Title Banner -->
-  <div id="header-bar">
-    <h1>POORNA MARKET DESIGN TOUR</h1>
-    <p>360° Architectural Experience</p>
-  </div>
+  <!-- A-Frame WebXR Scene -->
+  <a-scene webxr="optionalFeatures: hit-test, local-floor;" embedded style="width: 100vw; height: 100vh;">
+    
+    <!-- Asset Preloader -->
+    <a-assets>
+      <!-- Main Aerial Bird's Eye Render of Poorna Market (Updated Master Plan Asset) -->
+      <img id="poorna-aerial" src="poornamarket1_2.png" crossorigin="anonymous" onerror="this.src='https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=2000&q=80'">
+      
+      <!-- Ground 360 Panorama Samples (Fallback High-Res Equirectangular Renders) -->
+      <img id="pano-entrance" src="https://upload.wikimedia.org/wikipedia/commons/6/63/Equirectangular_projection_SW.jpg" crossorigin="anonymous">
+      <img id="pano-courtyard" src="https://upload.wikimedia.org/wikipedia/commons/1/18/Equirectangular_projection_panorama_of_Snaefellsjokull_national_park_in_Iceland.jpg" crossorigin="anonymous">
+      <img id="pano-organic" src="https://upload.wikimedia.org/wikipedia/commons/0/04/Equirectangular_projection_building_interior.jpg" crossorigin="anonymous">
+      <img id="pano-arcade" src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Equirectangular_projection_panorama_of_interior.jpg" crossorigin="anonymous">
+      <img id="pano-rooftop" src="https://upload.wikimedia.org/wikipedia/commons/d/da/Equirectangular_projection_panorama_sunset.jpg" crossorigin="anonymous">
+    </a-assets>
 
-  <!-- Status alert for missing images -->
-  <div id="status-msg">Panorama image not found. Ensure image file exists in main directory.</div>
+    <!-- 360 Background Skybox -->
+    <a-sky id="skybox" src="#poorna-aerial" rotation="0 -90 0" 
+           animation__fadeout="property: components.material.material.opacity; to: 0; dur: 350; startEvents: fadeout"
+           animation__fadein="property: components.material.material.opacity; to: 1; dur: 350; startEvents: fadein"></a-sky>
 
-  <!-- Bottom Navigation Bar matching reference UI -->
-  <div id="ui-container">
-    <div class="thumbnail-scroll" id="thumb-list">
-      <!-- Generated via JS -->
+    <!-- Camera Rig & Meta Quest VR Controllers -->
+    <a-entity id="rig" position="0 0 0">
+      <a-camera id="camera" position="0 1.6 0" look-controls="pointerLockEnabled: false">
+        <!-- Center Reticle Cursor for Non-6DOF Desktop/Mobile viewing -->
+        <a-cursor id="cursor" raycaster="objects: .clickable" color="#D4AF37" opacity="0.8" 
+                  position="0 0 -1" geometry="primitive: ring; radiusInner: 0.012; radiusOuter: 0.022"></a-cursor>
+      </a-camera>
+
+      <!-- Meta Quest Right Controller Laser -->
+      <a-entity laser-controls="hand: right" raycaster="objects: .clickable; far: 20; showLine: true" line="color: #D4AF37; opacity: 0.8"></a-entity>
+      <!-- Meta Quest Left Controller Laser -->
+      <a-entity laser-controls="hand: left" raycaster="objects: .clickable; far: 20; showLine: true" line="color: #D4AF37; opacity: 0.8"></a-entity>
+    </a-entity>
+
+    <!-- VR SPATIAL HOTSPOT MARKERS (Positioned on the Aerial Bird's Eye View) -->
+    <!-- Hotspot 1: Main Entrance Arch -->
+    <a-entity id="marker-entrance" class="clickable hotspot-marker" position="-0.8 1.8 -3" data-zone="entrance"
+              event-set__enter="_event: mouseenter; scale: 1.25 1.25 1.25"
+              event-set__leave="_event: mouseleave; scale: 1 1 1">
+      <a-sphere radius="0.08" color="#D4AF37" opacity="0.95"
+                animation="property: position; dir: alternate; dur: 1200; easing: easeInOutSine; loop: true; to: -0.8 1.85 -3"></a-sphere>
+      <a-ring radius-inner="0.1" radius-outer="0.13" color="#FF7043" rotation="-90 0 0" opacity="0.8"
+              animation="property: scale; dir: alternate; dur: 1200; loop: true; to: 1.4 1.4 1.4"></a-ring>
+      <a-text value="1. Main Entrance Arch" align="center" position="0 0.22 0" scale="0.35 0.35 0.35" color="#FFFFFF" font="kelsonsans"></a-text>
+    </a-entity>
+
+    <!-- Hotspot 2: Central Courtyard / Plaza -->
+    <a-entity id="marker-courtyard" class="clickable hotspot-marker" position="0 1.2 -3" data-zone="courtyard"
+              event-set__enter="_event: mouseenter; scale: 1.25 1.25 1.25"
+              event-set__leave="_event: mouseleave; scale: 1 1 1">
+      <a-sphere radius="0.08" color="#D4AF37" opacity="0.95"
+                animation="property: position; dir: alternate; dur: 1100; easing: easeInOutSine; loop: true; to: 0 1.25 -3"></a-sphere>
+      <a-ring radius-inner="0.1" radius-outer="0.13" color="#FF7043" rotation="-90 0 0" opacity="0.8"
+              animation="property: scale; dir: alternate; dur: 1100; loop: true; to: 1.4 1.4 1.4"></a-ring>
+      <a-text value="2. Central Courtyard" align="center" position="0 0.22 0" scale="0.35 0.35 0.35" color="#FFFFFF" font="kelsonsans"></a-text>
+    </a-entity>
+
+    <!-- Hotspot 3: Flower & Produce Market -->
+    <a-entity id="marker-organic" class="clickable hotspot-marker" position="1.1 1.6 -3" data-zone="organic"
+              event-set__enter="_event: mouseenter; scale: 1.25 1.25 1.25"
+              event-set__leave="_event: mouseleave; scale: 1 1 1">
+      <a-sphere radius="0.08" color="#D4AF37" opacity="0.95"
+                animation="property: position; dir: alternate; dur: 1300; easing: easeInOutSine; loop: true; to: 1.1 1.65 -3"></a-sphere>
+      <a-ring radius-inner="0.1" radius-outer="0.13" color="#FF7043" rotation="-90 0 0" opacity="0.8"
+              animation="property: scale; dir: alternate; dur: 1300; loop: true; to: 1.4 1.4 1.4"></a-ring>
+      <a-text value="3. Flower & Produce Market" align="center" position="0 0.22 0" scale="0.35 0.35 0.35" color="#FFFFFF" font="kelsonsans"></a-text>
+    </a-entity>
+
+    <!-- Hotspot 4: Commercial Arcade -->
+    <a-entity id="marker-arcade" class="clickable hotspot-marker" position="-1.5 1.1 -3.2" data-zone="arcade"
+              event-set__enter="_event: mouseenter; scale: 1.25 1.25 1.25"
+              event-set__leave="_event: mouseleave; scale: 1 1 1">
+      <a-sphere radius="0.08" color="#D4AF37" opacity="0.95"
+                animation="property: position; dir: alternate; dur: 1250; easing: easeInOutSine; loop: true; to: -1.5 1.15 -3.2"></a-sphere>
+      <a-ring radius-inner="0.1" radius-outer="0.13" color="#FF7043" rotation="-90 0 0" opacity="0.8"
+              animation="property: scale; dir: alternate; dur: 1250; loop: true; to: 1.4 1.4 1.4"></a-ring>
+      <a-text value="4. Commercial Arcade" align="center" position="0 0.22 0" scale="0.35 0.35 0.35" color="#FFFFFF" font="kelsonsans"></a-text>
+    </a-entity>
+
+    <!-- Hotspot 5: Roof Terrace Garden -->
+    <a-entity id="marker-rooftop" class="clickable hotspot-marker" position="0.8 2.2 -3.2" data-zone="rooftop"
+              event-set__enter="_event: mouseenter; scale: 1.25 1.25 1.25"
+              event-set__leave="_event: mouseleave; scale: 1 1 1">
+      <a-sphere radius="0.08" color="#D4AF37" opacity="0.95"
+                animation="property: position; dir: alternate; dur: 1400; easing: easeInOutSine; loop: true; to: 0.8 2.25 -3.2"></a-sphere>
+      <a-ring radius-inner="0.1" radius-outer="0.13" color="#FF7043" rotation="-90 0 0" opacity="0.8"
+              animation="property: scale; dir: alternate; dur: 1400; loop: true; to: 1.4 1.4 1.4"></a-ring>
+      <a-text value="5. Roof Terrace Garden" align="center" position="0 0.22 0" scale="0.35 0.35 0.35" color="#FFFFFF" font="kelsonsans"></a-text>
+    </a-entity>
+
+    <!-- Hotspot 4: Artisanal & Retail Arcade -->
+    <a-entity id="marker-arcade" class="clickable hotspot-marker" position="-1.5 1.1 -3.2" data-zone="arcade"
+              event-set__enter="_event: mouseenter; scale: 1.25 1.25 1.25"
+              event-set__leave="_event: mouseleave; scale: 1 1 1">
+      <a-sphere radius="0.08" color="#D4AF37" opacity="0.95"
+                animation="property: position; dir: alternate; dur: 1250; easing: easeInOutSine; loop: true; to: -1.5 1.15 -3.2"></a-sphere>
+      <a-ring radius-inner="0.1" radius-outer="0.13" color="#FF7043" rotation="-90 0 0" opacity="0.8"
+              animation="property: scale; dir: alternate; dur: 1250; loop: true; to: 1.4 1.4 1.4"></a-ring>
+      <a-text value="4. Artisanal Arcade" align="center" position="0 0.22 0" scale="0.35 0.35 0.35" color="#FFFFFF" font="kelsonsans"></a-text>
+    </a-entity>
+
+    <!-- Hotspot 5: Rooftop Garden Promenade -->
+    <a-entity id="marker-rooftop" class="clickable hotspot-marker" position="0.8 2.2 -3.2" data-zone="rooftop"
+              event-set__enter="_event: mouseenter; scale: 1.25 1.25 1.25"
+              event-set__leave="_event: mouseleave; scale: 1 1 1">
+      <a-sphere radius="0.08" color="#D4AF37" opacity="0.95"
+                animation="property: position; dir: alternate; dur: 1400; easing: easeInOutSine; loop: true; to: 0.8 2.25 -3.2"></a-sphere>
+      <a-ring radius-inner="0.1" radius-outer="0.13" color="#FF7043" rotation="-90 0 0" opacity="0.8"
+              animation="property: scale; dir: alternate; dur: 1400; loop: true; to: 1.4 1.4 1.4"></a-ring>
+      <a-text value="5. Rooftop Promenade" align="center" position="0 0.22 0" scale="0.35 0.35 0.35" color="#FFFFFF" font="kelsonsans"></a-text>
+    </a-entity>
+
+    <!-- 3D FLOATING VR HUD PANEL (Spatially floating 2 meters in front) -->
+    <a-entity id="vr-hud-panel" position="-1.8 1.4 -2.2" rotation="0 25 0">
+      <a-plane width="1.3" height="1.6" color="#0F172A" opacity="0.9" class="clickable" border="color: #D4AF37;">
+        <a-text value="POORNA MARKET" align="center" position="0 0.65 0.01" scale="0.45 0.45 0.45" color="#D4AF37" font="kelsonsans"></a-text>
+        <a-text value="Architectural Master Plan" align="center" position="0 0.53 0.01" scale="0.25 0.25 0.25" color="#94A3B8"></a-text>
+
+        <!-- Dynamic Selected Zone Title & Info in VR -->
+        <a-plane width="1.15" height="0.35" position="0 0.22 0.01" color="#1E293B">
+          <a-text id="vr-zone-title" value="Overview Mode" align="center" position="0 0.08 0.01" scale="0.3 0.3 0.3" color="#FFFFFF"></a-text>
+          <a-text id="vr-zone-desc" value="Select a zone on the aerial map to jump into 360 view." align="center" position="0 -0.06 0.01" scale="0.18 0.18 0.18" color="#CBD5E1"></a-text>
+        </a-plane>
+
+        <!-- VR Action Button: Jump to Selected Zone -->
+        <a-plane id="vr-btn-teleport" class="clickable" width="1.15" height="0.22" position="0 -0.15 0.01" color="#D4AF37">
+          <a-text id="vr-btn-label" value="EXPLORE 360 VIEW" align="center" position="0 0 0.01" scale="0.28 0.28 0.28" color="#0F172A"></a-text>
+        </a-plane>
+
+        <!-- VR Action Button: Return to Bird's Eye Aerial View -->
+        <a-plane id="vr-btn-birds-eye" class="clickable" width="1.15" height="0.2" position="0 -0.42 0.01" color="#FF7043">
+          <a-text value="RETURN TO BIRD'S EYE VIEW" align="center" position="0 0 0.01" scale="0.22 0.22 0.22" color="#FFFFFF"></a-text>
+        </a-plane>
+      </a-plane>
+    </a-entity>
+  </a-scene>
+
+  <!-- 2D SCREEN HUD OVERLAY (For Mobile / Desktop Browsers & Meta Quest 2D Web Window) -->
+  <div id="2d-hud" class="fixed inset-0 z-10 flex flex-col justify-between p-4 md:p-6 pointer-events-none">
+    
+    <!-- Top Header Bar -->
+    <div class="flex items-center justify-between w-full max-w-7xl mx-auto">
+      <div class="bg-slate-900/90 backdrop-blur-md border border-amber-500/30 rounded-2xl p-4 px-6 text-white shadow-2xl flex items-center space-x-4 pointer-events-auto">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-amber-400 font-bold text-lg">
+          PM
+        </div>
+        <div>
+          <h1 class="text-lg md:text-xl font-bold tracking-wide text-amber-400">Poorna Market Visualization</h1>
+          <p class="text-xs text-slate-400">Architectural WebVR 360 Viewer • Enscape Renders</p>
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="flex items-center space-x-3 pointer-events-auto">
+        <button id="btn-reset-view" class="bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md border border-slate-700 text-slate-200 px-4 py-2.5 rounded-xl text-sm font-medium transition duration-200 flex items-center space-x-2 shadow-lg">
+          <i class="fa-solid fa-plane-departure text-amber-400"></i>
+          <span class="hidden sm:inline">Bird's-Eye Overview</span>
+        </button>
+        
+        <button id="btn-toggle-instructions" class="bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md border border-slate-700 text-slate-200 p-2.5 px-3 rounded-xl text-sm transition duration-200 shadow-lg" title="GitHub Setup & Instructions">
+          <i class="fa-solid fa-code text-amber-400"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Bottom Controls & Zone Selector Carousel -->
+    <div class="w-full max-w-5xl mx-auto my-2 pointer-events-auto">
+      <div class="bg-slate-900/90 backdrop-blur-md border border-slate-800 rounded-2xl p-4 text-white shadow-2xl">
+        
+        <div class="flex items-center justify-between mb-3 px-1">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+            <span class="text-xs font-semibold tracking-wider text-slate-400 uppercase">Select Zone to Inspect</span>
+          </div>
+          <span id="current-view-badge" class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 font-medium">
+            Aerial Bird's Eye View
+          </span>
+        </div>
+
+        <!-- Zone Selector Buttons -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
+          <button data-zone="entrance" class="zone-card bg-slate-800/80 hover:bg-amber-500/20 border border-slate-700 hover:border-amber-500/50 p-3 rounded-xl text-left transition duration-200 group">
+            <div class="text-xs text-amber-400/80 font-medium">Zone 01</div>
+            <div class="text-sm font-bold text-slate-100 group-hover:text-amber-300 truncate">Main Entrance</div>
+          </button>
+
+          <button data-zone="courtyard" class="zone-card bg-slate-800/80 hover:bg-amber-500/20 border border-slate-700 hover:border-amber-500/50 p-3 rounded-xl text-left transition duration-200 group">
+            <div class="text-xs text-amber-400/80 font-medium">Zone 02</div>
+            <div class="text-sm font-bold text-slate-100 group-hover:text-amber-300 truncate">Central Courtyard</div>
+          </button>
+
+          <button data-zone="organic" class="zone-card bg-slate-800/80 hover:bg-amber-500/20 border border-slate-700 hover:border-amber-500/50 p-3 rounded-xl text-left transition duration-200 group">
+            <div class="text-xs text-amber-400/80 font-medium">Zone 03</div>
+            <div class="text-sm font-bold text-slate-100 group-hover:text-amber-300 truncate">Flower & Produce</div>
+          </button>
+
+          <button data-zone="arcade" class="zone-card bg-slate-800/80 hover:bg-amber-500/20 border border-slate-700 hover:border-amber-500/50 p-3 rounded-xl text-left transition duration-200 group">
+            <div class="text-xs text-amber-400/80 font-medium">Zone 04</div>
+            <div class="text-sm font-bold text-slate-100 group-hover:text-amber-300 truncate">Commercial Arcade</div>
+          </button>
+
+          <button data-zone="rooftop" class="zone-card bg-slate-800/80 hover:bg-amber-500/20 border border-slate-700 hover:border-amber-500/50 p-3 rounded-xl text-left transition duration-200 group">
+            <div class="text-xs text-amber-400/80 font-medium">Zone 05</div>
+            <div class="text-sm font-bold text-slate-100 group-hover:text-amber-300 truncate">Roof Terrace</div>
+          </button>
+        </div>
+
+      </div>
     </div>
   </div>
 
-  <!-- 360 WebVR Scene -->
-  <a-scene webxr="optionalFeatures: hit-test" loading-screen="enabled: false">
-    
-    <!-- Asset Management (NO SUBFOLDERS - All files in root folder) -->
-    <a-assets timeout="10000">
-      <img id="pano1" src="poornmarket1.png" crossorigin="anonymous">
-      <img id="pano2" src="pano2.jpg" crossorigin="anonymous">
-      <img id="pano3" src="pano3.jpg" crossorigin="anonymous">
-      <img id="pano4" src="pano4.jpg" crossorigin="anonymous">
-      <img id="pano5" src="pano5.jpg" crossorigin="anonymous">
-      <img id="pano6" src="pano6.jpg" crossorigin="anonymous">
-      <img id="pano7" src="pano7.jpg" crossorigin="anonymous">
-      <img id="pano8" src="pano8.jpg" crossorigin="anonymous">
-      <img id="pano9" src="pano9.jpg" crossorigin="anonymous">
-      <img id="pano10" src="pano10.jpg" crossorigin="anonymous">
-    </a-assets>
-
-    <!-- Camera Setup & Gaze Reticle for VR Headsets -->
-    <a-entity id="rig" position="0 1.6 0">
-      <a-camera id="camera" look-controls touch-controls>
-        <!-- Subtle Gaze Reticle (hidden by default on desktop, active on hover) -->
-        <a-cursor
-          id="cursor"
-          raycaster="objects: .clickable"
-          color="#38bdf8"
-          opacity="0.4"
-          position="0 0 -1"
-          geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.01">
-        </a-cursor>
-      </a-camera>
-
-      <!-- VR Controller support for Meta Quest -->
-    <!-- Camera Setup for Web & VR -->
-    <a-entity id="rig" position="0 1.6 0">
-      <a-camera id="camera" look-controls touch-controls>
-        <!-- Blue gaze cursor removed for a clean unobstructed view -->
-      </a-camera>
-
-      <!-- VR Controller support for Meta Quest -->
-      <a-entity oculus-touch-controls="hand: left"></a-entity>
-      <a-entity oculus-touch-controls="hand: right" raycaster="objects: .clickable" laser-controls></a-entity>
-    </a-entity>
-
-    <!-- 360 Panorama Sky Sphere -->
-    <a-sky id="mainSky" src="#pano1" material="color: #1e293b" rotation="0 -90 0"></a-sky>
-
-    <!-- 3D Spatial Navigation Hotspots (Forward, Left, Right Arrows on Promenade Ground) -->
-    <a-entity id="spatialHotspots">
-      <!-- Forward Arrow -->
-      <a-entity id="arrowForward" class="clickable" position="0 0.1 -2.2" rotation="-70 0 0" onclick="navigateHotspot('forward')">
-        <a-circle radius="0.22" color="#ffffff" opacity="0.85">
-          <a-text value="^" align="center" color="#000000" position="0 0 0.01" scale="1.2 1.2 1.2"></a-text>
-        </a-circle>
-      </a-entity>
-
-      <!-- Left Arrow -->
-      <a-entity id="arrowLeft" class="clickable" position="-1.6 0.5 -2.0" rotation="-30 35 0" onclick="navigateHotspot('left')">
-        <a-circle radius="0.2" color="#ffffff" opacity="0.85">
-          <a-text value="<" align="center" color="#000000" position="0 0 0.01" scale="0.9 0.9 0.9"></a-text>
-        </a-circle>
-      </a-entity>
-
-      <!-- Right Arrow -->
-      <a-entity id="arrowRight" class="clickable" position="1.6 0.5 -2.0" rotation="-30 -35 0" onclick="navigateHotspot('right')">
-        <a-circle radius="0.2" color="#ffffff" opacity="0.85">
-          <a-text value=">" align="center" color="#000000" position="0 0 0.01" scale="0.9 0.9 0.9"></a-text>
-        </a-circle>
-      </a-entity>
-    </a-entity>
-
-    <!-- Floating Spatial VR Menu (Visible inside VR Headsets) -->
-    <a-entity id="vrHUD" position="0 1.2 -2.2" rotation="-15 0 0">
-      <a-plane width="2.2" height="0.4" color="#0f172a" opacity="0.85" border="1 #38bdf8">
-        <a-text id="vrStatusText" value="Current View: Main Entry" align="center" position="0 0.05 0.01" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
-        <a-text value="Use bottom menu or gaze at buttons" align="center" position="0 -0.1 0.01" scale="0.22 0.22 0.22" color="#94a3b8"></a-text>
-      </a-plane>
-    </a-entity>
-
-  </a-scene>
-
-  <script>
-    // List of your 10 design spaces matching Poorna Market zones
-    const spaces = [
-      { id: 'pano1', title: 'Main Entry', file: 'poornmarket1.png' },
-      { id: 'pano2', title: 'Grocery Lane', file: 'pano2.jpg' },
-      { id: 'pano3', title: 'Textile Street', file: 'pano3.jpg' },
-      { id: 'pano4', title: 'Vendor Court', file: 'pano4.jpg' },
-      { id: 'pano5', title: 'Food Street', file: 'pano5.jpg' },
-      { id: 'pano6', title: 'Community Plaza', file: 'pano6.jpg' },
-      { id: 'pano7', title: 'Admin / Services', file: 'pano7.jpg' },
-      { id: 'pano8', title: 'Central Courtyard', file: 'pano8.jpg' },
-      { id: 'pano9', title: 'Artisans Hub', file: 'pano9.jpg' },
-      { id: 'pano10', title: 'Flower Market', file: 'pano10.jpg' }
-    ];
-
-    let currentIndex = 0;
-
-    const thumbList = document.getElementById('thumb-list');
-    const sky = document.getElementById('mainSky');
-    const vrStatusText = document.getElementById('vrStatusText');
-    const statusMsg = document.getElementById('status-msg');
-
-    // Directional spatial hotspot walker
-    function navigateHotspot(direction) {
-      if (direction === 'forward') {
-        currentIndex = (currentIndex + 1) % spaces.length;
-      } else if (direction === 'left') {
-        currentIndex = (currentIndex - 1 + spaces.length) % spaces.length;
-      } else if (direction === 'right') {
-        currentIndex = (currentIndex + 2) % spaces.length;
-      }
-      switchPanorama(spaces[currentIndex]);
-    }
-
-    // Build the bottom thumbnail toolbar dynamically
-    spaces.forEach((space, index) => {
-      const card = document.createElement('div');
-      card.className = `nav-card ${index === 0 ? 'active' : ''}`;
-      card.id = `card-${space.id}`;
+  <!-- Developer Setup Modal (Instructions for GitHub Pages Deployment & VR Usage) -->
+  <div id="modal-instructions" class="fixed inset-0 z-30 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 text-slate-200 shadow-2xl relative max-h-[90vh] overflow-y-auto">
       
-      // If the image hasn't been uploaded yet, it falls back to a colored block safely
-      card.innerHTML = `
-        <img src="${space.file}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'110\\' height=\\'60\\' viewBox=\\'0 0 110 60\\'><rect width=\\'110\\' height=\\'60\\' fill=\\'%23334155\\'/><text x=\\'50%\\' y=\\'55%\\' fill=\\'%2394a3b8\\' font-size=\\'10\\' text-anchor=\\'middle\\'>360 Image</text></svg>'" alt="${space.title}">
-        <span>${space.title}</span>
-      `;
+      <button id="btn-close-modal" class="absolute top-4 right-4 text-slate-400 hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
 
-      card.onclick = () => switchPanorama(space);
-      thumbList.appendChild(card);
-    });
+      <div class="flex items-center space-x-3 mb-4">
+        <div class="p-3 bg-amber-500/20 border border-amber-500/40 rounded-xl text-amber-400">
+          <i class="fa-brands fa-github text-2xl"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-white">GitHub Pages Deployment & VR Setup</h2>
+          <p class="text-xs text-slate-400">Host your own Enscape 360 panoramas for Meta Quest WebVR</p>
+        </div>
+      </div>
 
-    // Function to switch 360 panorama views
-    function switchPanorama(space) {
-      currentIndex = spaces.findIndex(s => s.id === space.id);
+      <div class="space-y-4 text-sm text-slate-300">
+        <div class="p-4 bg-slate-800/60 rounded-xl border border-slate-700">
+          <h3 class="font-semibold text-amber-400 mb-1"><i class="fa-solid fa-1 mr-2"></i>Exporting from Enscape</h3>
+          <p class="text-xs text-slate-400">Export your architectural renders as <b>360 Panorama (Equirectangular PNG/JPG)</b> at 4096x2048 resolution for optimal performance on Meta Quest headsets.</p>
+        </div>
 
-      // Highlight active thumbnail
-      document.querySelectorAll('.nav-card').forEach(c => c.classList.remove('active'));
-      const activeCard = document.getElementById(`card-${space.id}`);
-      if (activeCard) activeCard.classList.add('active');
+        <div class="p-4 bg-slate-800/60 rounded-xl border border-slate-700">
+          <h3 class="font-semibold text-amber-400 mb-1"><i class="fa-solid fa-2 mr-2"></i>Deploying to GitHub Pages</h3>
+          <ol class="list-disc list-inside text-xs text-slate-400 space-y-1">
+            <li>Create a new repository named <code class="text-amber-300">poorna-market-vr</code> on GitHub.</li>
+            <li>Upload this <code class="text-amber-300">index.html</code> file along with your exported 360 images.</li>
+            <li>Go to <b>Settings &gt; Pages</b>, select <code class="text-amber-300">main</code> branch and click Save.</li>
+            <li>HTTPS URL will be generated automatically (Required for Meta Quest WebXR APIs).</li>
+          </ol>
+        </div>
 
-      // Update 360 Sky texture
-      sky.setAttribute('src', `#${space.id}`);
+        <div class="p-4 bg-slate-800/60 rounded-xl border border-slate-700">
+          <h3 class="font-semibold text-amber-400 mb-1"><i class="fa-solid fa-vr-cardboard mr-2"></i>Viewing on Meta Quest</h3>
+          <p class="text-xs text-slate-400">Open the Meta Quest Browser in your VR headset, navigate to your GitHub Pages URL, and click the <b>"Enter VR"</b> button at the bottom right corner.</p>
+        </div>
+      </div>
 
-      // Update spatial VR text
-      if (vrStatusText) {
-        vrStatusText.setAttribute('value', `Current View: ${space.title}`);
+      <div class="mt-6 text-right">
+        <button id="btn-dismiss-modal" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-5 py-2.5 rounded-xl text-sm transition">
+          Got it, return to viewer
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JavaScript Architectural Viewer State Engine -->
+  <script>
+    // Zone Database with Metadata & Panorama Asset IDs
+    const ZONES = {
+      entrance: {
+        title: "Main Entrance Arch",
+        desc: "Features the grand parametric bamboo archway and reception plaza facing the main thoroughfare.",
+        assetId: "#pano-entrance",
+        markerId: "#marker-entrance",
+        occupancy: "Grand Portal • Public Plaza"
+      },
+      courtyard: {
+        title: "Central Courtyard & Plaza",
+        desc: "Open-air landscaped community space surrounded by terraced retail corridors.",
+        assetId: "#pano-courtyard",
+        markerId: "#marker-courtyard",
+        occupancy: "Gathering Space • Shaded Canopy"
+      },
+      organic: {
+        title: "Flower & Produce Market",
+        desc: "Naturally ventilated arcade housing organic vegetable, fruit, and spice vendors.",
+        assetId: "#pano-organic",
+        markerId: "#marker-organic",
+        occupancy: "Fresh Produce • Micro-Stalls"
+      },
+      arcade: {
+        title: "Commercial Arcade",
+        desc: "Double-height brick and timber arcade for traditional crafts, textiles, and local art.",
+        assetId: "#pano-arcade",
+        markerId: "#marker-arcade",
+        occupancy: "Retail • Craft Workshops"
+      },
+      rooftop: {
+        title: "Roof Terrace Garden",
+        desc: "Elevated green roof walkway offering panoramic views of the market courtyard below.",
+        assetId: "#pano-rooftop",
+        markerId: "#marker-rooftop",
+        occupancy: "Green Roof • Outdoor Seating"
       }
+    };
 
-      // Pre-check if image exists
-      const imgCheck = new Image();
-      imgCheck.src = space.file;
-      imgCheck.onerror = () => {
-        statusMsg.innerText = `File missing: Please save "${space.file}" in your main GitHub directory.`;
-        statusMsg.style.display = 'block';
-        setTimeout(() => { statusMsg.style.display = 'none'; }, 4000);
-      };
-      imgCheck.onload = () => {
-        statusMsg.style.display = 'none';
-      };
+    let selectedZoneKey = 'entrance';
+    let currentMode = 'birds-eye'; // 'birds-eye' or 'ground'
+
+    // DOM Elements
+    const skybox = document.querySelector('#skybox');
+    const vrZoneTitle = document.querySelector('#vr-zone-title');
+    const vrZoneDesc = document.querySelector('#vr-zone-desc');
+    const vrBtnTeleport = document.querySelector('#vr-btn-teleport');
+    const vrBtnBirdsEye = document.querySelector('#vr-btn-birds-eye');
+    const currentViewBadge = document.querySelector('#current-view-badge');
+
+    // Switch Panorama with Smooth Fade Transition
+    function loadPanorama(assetId, modeName) {
+      // Trigger smooth fadeout animation
+      skybox.emit('fadeout');
+
+      setTimeout(() => {
+        skybox.setAttribute('src', assetId);
+        skybox.emit('fadein');
+        
+        currentMode = modeName;
+        if (modeName === 'birds-eye') {
+          currentViewBadge.textContent = "Aerial Bird's Eye View";
+          currentViewBadge.className = "text-xs px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 font-medium";
+        } else {
+          currentViewBadge.textContent = `360 Ground View (${ZONES[selectedZoneKey].title})`;
+          currentViewBadge.className = "text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-medium";
+        }
+      }, 350);
     }
+
+    // Select Zone Function
+    function selectZone(zoneKey) {
+      if (!ZONES[zoneKey]) return;
+      selectedZoneKey = zoneKey;
+      const zone = ZONES[zoneKey];
+
+      // Update VR Spatial HUD Text
+      vrZoneTitle.setAttribute('value', zone.title);
+      vrZoneDesc.setAttribute('value', zone.desc);
+
+      // Highlight active zone cards in 2D UI
+      document.querySelectorAll('.zone-card').forEach(btn => {
+        if (btn.dataset.zone === zoneKey) {
+          btn.classList.add('border-amber-500', 'bg-amber-500/20');
+        } else {
+          btn.classList.remove('border-amber-500', 'bg-amber-500/20');
+        }
+      });
+    }
+
+    // Enter Ground 360 View for selected zone
+    function enterSelectedZoneGroundView() {
+      const zone = ZONES[selectedZoneKey];
+      if (zone) {
+        loadPanorama(zone.assetId, 'ground');
+      }
+    }
+
+    // Return to Main Aerial Bird's Eye Render
+    function returnToBirdsEye() {
+      loadPanorama('#poorna-aerial', 'birds-eye');
+      selectZone('entrance');
+    }
+
+    // Initialize Event Listeners when DOM & A-Frame scene are loaded
+    window.addEventListener('load', () => {
+      selectZone('entrance');
+
+      // Add click handlers for 3D spatial hotspot markers
+      document.querySelectorAll('.hotspot-marker').forEach(marker => {
+        marker.addEventListener('click', (evt) => {
+          const zoneKey = marker.dataset.zone;
+          selectZone(zoneKey);
+          enterSelectedZoneGroundView();
+        });
+      });
+
+      // VR HUD Panel Button Interactions
+      vrBtnTeleport.addEventListener('click', enterSelectedZoneGroundView);
+      vrBtnBirdsEye.addEventListener('click', returnToBirdsEye);
+
+      // 2D HUD UI Button Handlers
+      document.querySelectorAll('.zone-card').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const zoneKey = btn.dataset.zone;
+          selectZone(zoneKey);
+          enterSelectedZoneGroundView();
+        });
+      });
+
+      document.querySelector('#btn-reset-view').addEventListener('click', returnToBirdsEye);
+
+      // Instructions Modal Handlers
+      const modal = document.querySelector('#modal-instructions');
+      document.querySelector('#btn-toggle-instructions').addEventListener('click', () => modal.classList.remove('hidden'));
+      document.querySelector('#btn-close-modal').addEventListener('click', () => modal.classList.add('hidden'));
+      document.querySelector('#btn-dismiss-modal').addEventListener('click', () => modal.classList.add('hidden'));
+    });
   </script>
 </body>
 </html>
