@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-10-22T20:08:10.417Z",
+        "reason": "Agent: white overview text sits over a darkened aerial image and dark header in the rendered desktop and mobile views; static detector assumes the paper body background"
+      }
+    ]
+  }
+}
