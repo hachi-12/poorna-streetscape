@@ -16,6 +16,7 @@ const byId = id => document.getElementById(id);
 const overview = byId("overview");
 const walkthrough = byId("walkthrough");
 const mapHotspots = byId("map-hotspots");
+const placePanel = byId("place-panel");
 const locationList = byId("location-list");
 const walkImage = byId("walk-image");
 const imageError = byId("image-error");
@@ -55,6 +56,15 @@ function renderSelection() {
   byId("vr-panel").setAttribute("src",current.image);
   byId("vr-panel").setAttribute("height","1.55");
 }
+function showPanel(place) {
+  current = place;
+  renderSelection();
+  placePanel.hidden = false;
+}
+function hidePanel() {
+  placePanel.hidden = true;
+  document.querySelectorAll(".hotspot").forEach(button=>button.setAttribute("aria-pressed","false"));
+}
 function loadScene(place) {
   const request = ++imageRequest;
   const wrapper = walkImage.parentElement;
@@ -74,14 +84,17 @@ function loadScene(place) {
   };
   preloader.src = place.image;
 }
-function setState(place,view,{push=true,scroll=true}={}) {
+function setState(place,view,{push=true,scroll=true,showInfo=true}={}) {
   current = place;
   mode = view;
   renderSelection();
   const isWalk = view==="walkthrough";
+  document.body.classList.toggle("overview-mode",!isWalk);
   walkthrough.hidden = !isWalk;
   overview.hidden = isWalk;
   document.querySelector(".intro").hidden = isWalk;
+  if(!isWalk && showInfo)showPanel(place);
+  else hidePanel();
   if(isWalk)loadScene(place);
   if(push)writeUrl(place,view);
   if(scroll)(isWalk?walkthrough:overview).scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"instant":"smooth",block:"start"});
@@ -100,6 +113,8 @@ function buildNavigation() {
     hotspot.style.top=`${place.y}%`;
     hotspot.setAttribute("aria-label",`Select ${place.name} on aerial view`);
     hotspot.textContent=String(index+1);
+    hotspot.addEventListener("mouseenter",()=>showPanel(place));
+    hotspot.addEventListener("focus",()=>showPanel(place));
     hotspot.addEventListener("click",()=>setState(place,"overview",{scroll:false}));
     mapHotspots.append(hotspot);
     const card = document.createElement("button");
@@ -146,7 +161,10 @@ function initVr() {
 }
 buildNavigation();
 const initial=stateFromUrl();
-setState(initial.place,initial.view,{push:false,scroll:false});
+setState(initial.place,initial.view,{push:false,scroll:false,showInfo:new URLSearchParams(location.search).has("zone")});
+byId("panel-close").addEventListener("click",hidePanel);
+document.addEventListener("keydown",event=>{if(event.key==="Escape" && mode==="overview")hidePanel();});
+byId("map-frame")?.addEventListener("click",event=>{if(event.target===event.currentTarget)hidePanel();});
 byId("panel-go").addEventListener("click",()=>setState(current,"walkthrough"));
 byId("back-map").addEventListener("click",()=>setState(current,"overview"));
 byId("prev-place").addEventListener("click",()=>neighbour(-1));
