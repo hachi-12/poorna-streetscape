@@ -1,449 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Poorna Market - Architectural 360 VR Master Plan</title>
-  
-  <!-- Tailwind CSS for UI HUD styling -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- A-Frame Framework for WebXR & Meta Quest VR -->
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  
-  <!-- FontAwesome for UI Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <style>
-    /* Custom Scrollbar for Info Panels */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: rgba(15, 23, 42, 0.6);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #D4AF37;
-      border-radius: 3px;
-    }
-    body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      margin: 0;
-      overflow: hidden;
-      background-color: #0B0F17;
-    }
-    /* WebXR Overlay HUD Container */
-    #2d-hud {
-      pointer-events: none;
-    }
-    #2d-hud * {
-      pointer-events: auto;
-    }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#202722">
+  <meta name="description" content="Explore the Poorna Market urban design proposal from above and at street level.">
+  <title>Poorna Market | An Urban Design Walkthrough</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anek:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
+  <script defer src="app.js"></script>
 </head>
-<body class="select-none">
-
-  <!-- A-Frame WebXR Scene -->
-  <a-scene webxr="optionalFeatures: hit-test, local-floor;" embedded style="width: 100vw; height: 100vh;">
-    
-    <!-- Asset Preloader -->
-    <a-assets>
-      <!-- Main Aerial Bird's Eye Render of Poorna Market (Updated Background Asset) -->
-      <img id="poorna-aerial" src="poornamarket1_3.png" crossorigin="anonymous" onerror="this.src='https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=2000&q=80'">
-      
-      <!-- Ground 360 Panorama Samples (Fallback High-Res Equirectangular Renders) -->
-      <img id="pano-entrance" src="https://upload.wikimedia.org/wikipedia/commons/6/63/Equirectangular_projection_SW.jpg" crossorigin="anonymous">
-      <img id="pano-courtyard" src="https://upload.wikimedia.org/wikipedia/commons/1/18/Equirectangular_projection_panorama_of_Snaefellsjokull_national_park_in_Iceland.jpg" crossorigin="anonymous">
-      <img id="pano-organic" src="https://upload.wikimedia.org/wikipedia/commons/0/04/Equirectangular_projection_building_interior.jpg" crossorigin="anonymous">
-      <img id="pano-arcade" src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Equirectangular_projection_panorama_of_interior.jpg" crossorigin="anonymous">
-      <img id="pano-rooftop" src="https://upload.wikimedia.org/wikipedia/commons/d/da/Equirectangular_projection_panorama_sunset.jpg" crossorigin="anonymous">
-    </a-assets>
-
-    <!-- 360 Background Skybox -->
-    <a-sky id="skybox" src="#poorna-aerial" rotation="0 -90 0" 
-           animation__fadeout="property: components.material.material.opacity; to: 0; dur: 350; startEvents: fadeout"
-           animation__fadein="property: components.material.material.opacity; to: 1; dur: 350; startEvents: fadein"></a-sky>
-
-    <!-- Camera Rig & Meta Quest VR Controllers -->
-    <a-entity id="rig" position="0 0 0">
-      <a-camera id="camera" position="0 1.6 0" look-controls="pointerLockEnabled: false">
-        <!-- Center Reticle Cursor for Non-6DOF Desktop/Mobile viewing -->
-        <a-cursor id="cursor" raycaster="objects: .clickable" color="#D4AF37" opacity="0.8" 
-                  position="0 0 -1" geometry="primitive: ring; radiusInner: 0.012; radiusOuter: 0.022"></a-cursor>
-      </a-camera>
-
-      <!-- Meta Quest Right Controller Laser -->
-      <a-entity laser-controls="hand: right" raycaster="objects: .clickable; far: 20; showLine: true" line="color: #D4AF37; opacity: 0.8"></a-entity>
-      <!-- Meta Quest Left Controller Laser -->
-      <a-entity laser-controls="hand: left" raycaster="objects: .clickable; far: 20; showLine: true" line="color: #D4AF37; opacity: 0.8"></a-entity>
-    </a-entity>
-
-    <!-- VR SPATIAL HOTSPOT MARKERS (Positioned on the Aerial Bird's Eye View) -->
-    <!-- Hotspot 1: Main Entrance Arch -->
-    <a-entity id="marker-entrance" class="clickable hotspot-marker" position="-0.8 1.8 -3" data-zone="entrance"
-              event-set__enter="_event: mouseenter; scale: 1.25 1.25 1.25"
-              event-set__leave="_event: mouseleave; scale: 1 1 1">
-      <a-sphere radius="0.08" color="#D4AF37" opacity="0.95"
-                animation="property: position; dir: alternate; dur: 1200; easing: easeInOutSine; loop: true; to: -0.8 1.85 -3"></a-sphere>
-      <a-ring radius-inner="0.1" radius-outer="0.13" color="#FF7043" rotation="-90 0 0" opacity="0.8"
-              animation="property: scale; dir: alternate; dur: 1200; loop: true; to: 1.4 1.4 1.4"></a-ring>
-      <a-text value="1. Main Entrance Arch" align="center" position="0 0.22 0" scale="0.35 0.35 0.35" color="#FFFFFF" font="kelsonsans"></a-text>
-    </a-entity>
-
-    <!-- Hotspot 2: Central Courtyard / Plaza -->
-    <a-entity id="marker-courtyard" class="clickable hotspot-marker" position="0 1.2 -3" data-zone="courtyard"
-              event-set__enter="_event: mouseenter; scale: 1.25 1.25 1.25"
-              event-set__leave="_event: mouseleave; scale: 1 1 1">
-      <a-sphere radius="0.08" color="#D4AF37" opacity="0.95"
-                animation="property: position; dir: alternate; dur: 1100; easing: easeInOutSine; loop: true; to: 0 1.25 -3"></a-sphere>
-      <a-ring radius-inner="0.1" radius-outer="0.13" color="#FF7043" rotation="-90 0 0" opacity="0.8"
-              animation="property: scale; dir: alternate; dur: 1100; loop: true; to: 1.4 1.4 1.4"></a-ring>
-      <a-text value="2. Central Courtyard" align="center" position="0 0.22 0" scale="0.35 0.35 0.35" color="#FFFFFF" font="kelsonsans"></a-text>
-    </a-entity>
-
-    <!-- Hotspot 3: Flower & Produce Market -->
-    <a-entity id="marker-organic" class="clickable hotspot-marker" position="1.1 1.6 -3" data-zone="organic"
-              event-set__enter="_event: mouseenter; scale: 1.25 1.25 1.25"
-              event-set__leave="_event: mouseleave; scale: 1 1 1">
-      <a-sphere radius="0.08" color="#D4AF37" opacity="0.95"
-                animation="property: position; dir: alternate; dur: 1300; easing: easeInOutSine; loop: true; to: 1.1 1.65 -3"></a-sphere>
-      <a-ring radius-inner="0.1" radius-outer="0.13" color="#FF7043" rotation="-90 0 0" opacity="0.8"
-              animation="property: scale; dir: alternate; dur: 1300; loop: true; to: 1.4 1.4 1.4"></a-ring>
-      <a-text value="3. Flower & Produce Market" align="center" position="0 0.22 0" scale="0.35 0.35 0.35" color="#FFFFFF" font="kelsonsans"></a-text>
-    </a-entity>
-
-    <!-- Hotspot 4: Commercial Arcade -->
-    <a-entity id="marker-arcade" class="clickable hotspot-marker" position="-1.5 1.1 -3.2" data-zone="arcade"
-              event-set__enter="_event: mouseenter; scale: 1.25 1.25 1.25"
-              event-set__leave="_event: mouseleave; scale: 1 1 1">
-      <a-sphere radius="0.08" color="#D4AF37" opacity="0.95"
-                animation="property: position; dir: alternate; dur: 1250; easing: easeInOutSine; loop: true; to: -1.5 1.15 -3.2"></a-sphere>
-      <a-ring radius-inner="0.1" radius-outer="0.13" color="#FF7043" rotation="-90 0 0" opacity="0.8"
-              animation="property: scale; dir: alternate; dur: 1250; loop: true; to: 1.4 1.4 1.4"></a-ring>
-      <a-text value="4. Commercial Arcade" align="center" position="0 0.22 0" scale="0.35 0.35 0.35" color="#FFFFFF" font="kelsonsans"></a-text>
-    </a-entity>
-
-    <!-- Hotspot 5: Roof Terrace Garden -->
-    <a-entity id="marker-rooftop" class="clickable hotspot-marker" position="0.8 2.2 -3.2" data-zone="rooftop"
-              event-set__enter="_event: mouseenter; scale: 1.25 1.25 1.25"
-              event-set__leave="_event: mouseleave; scale: 1 1 1">
-      <a-sphere radius="0.08" color="#D4AF37" opacity="0.95"
-                animation="property: position; dir: alternate; dur: 1400; easing: easeInOutSine; loop: true; to: 0.8 2.25 -3.2"></a-sphere>
-      <a-ring radius-inner="0.1" radius-outer="0.13" color="#FF7043" rotation="-90 0 0" opacity="0.8"
-              animation="property: scale; dir: alternate; dur: 1400; loop: true; to: 1.4 1.4 1.4"></a-ring>
-      <a-text value="5. Roof Terrace Garden" align="center" position="0 0.22 0" scale="0.35 0.35 0.35" color="#FFFFFF" font="kelsonsans"></a-text>
-    </a-entity>
-
-    <!-- Hotspot 4: Artisanal & Retail Arcade -->
-    <a-entity id="marker-arcade" class="clickable hotspot-marker" position="-1.5 1.1 -3.2" data-zone="arcade"
-              event-set__enter="_event: mouseenter; scale: 1.25 1.25 1.25"
-              event-set__leave="_event: mouseleave; scale: 1 1 1">
-      <a-sphere radius="0.08" color="#D4AF37" opacity="0.95"
-                animation="property: position; dir: alternate; dur: 1250; easing: easeInOutSine; loop: true; to: -1.5 1.15 -3.2"></a-sphere>
-      <a-ring radius-inner="0.1" radius-outer="0.13" color="#FF7043" rotation="-90 0 0" opacity="0.8"
-              animation="property: scale; dir: alternate; dur: 1250; loop: true; to: 1.4 1.4 1.4"></a-ring>
-      <a-text value="4. Artisanal Arcade" align="center" position="0 0.22 0" scale="0.35 0.35 0.35" color="#FFFFFF" font="kelsonsans"></a-text>
-    </a-entity>
-
-    <!-- Hotspot 5: Rooftop Garden Promenade -->
-    <a-entity id="marker-rooftop" class="clickable hotspot-marker" position="0.8 2.2 -3.2" data-zone="rooftop"
-              event-set__enter="_event: mouseenter; scale: 1.25 1.25 1.25"
-              event-set__leave="_event: mouseleave; scale: 1 1 1">
-      <a-sphere radius="0.08" color="#D4AF37" opacity="0.95"
-                animation="property: position; dir: alternate; dur: 1400; easing: easeInOutSine; loop: true; to: 0.8 2.25 -3.2"></a-sphere>
-      <a-ring radius-inner="0.1" radius-outer="0.13" color="#FF7043" rotation="-90 0 0" opacity="0.8"
-              animation="property: scale; dir: alternate; dur: 1400; loop: true; to: 1.4 1.4 1.4"></a-ring>
-      <a-text value="5. Rooftop Promenade" align="center" position="0 0.22 0" scale="0.35 0.35 0.35" color="#FFFFFF" font="kelsonsans"></a-text>
-    </a-entity>
-
-    <!-- 3D FLOATING VR HUD PANEL (Spatially floating 2 meters in front) -->
-    <a-entity id="vr-hud-panel" position="-1.8 1.4 -2.2" rotation="0 25 0">
-      <a-plane width="1.3" height="1.6" color="#0F172A" opacity="0.9" class="clickable" border="color: #D4AF37;">
-        <a-text value="POORNA MARKET" align="center" position="0 0.65 0.01" scale="0.45 0.45 0.45" color="#D4AF37" font="kelsonsans"></a-text>
-        <a-text value="Architectural Master Plan" align="center" position="0 0.53 0.01" scale="0.25 0.25 0.25" color="#94A3B8"></a-text>
-
-        <!-- Dynamic Selected Zone Title & Info in VR -->
-        <a-plane width="1.15" height="0.35" position="0 0.22 0.01" color="#1E293B">
-          <a-text id="vr-zone-title" value="Overview Mode" align="center" position="0 0.08 0.01" scale="0.3 0.3 0.3" color="#FFFFFF"></a-text>
-          <a-text id="vr-zone-desc" value="Select a zone on the aerial map to jump into 360 view." align="center" position="0 -0.06 0.01" scale="0.18 0.18 0.18" color="#CBD5E1"></a-text>
-        </a-plane>
-
-        <!-- VR Action Button: Jump to Selected Zone -->
-        <a-plane id="vr-btn-teleport" class="clickable" width="1.15" height="0.22" position="0 -0.15 0.01" color="#D4AF37">
-          <a-text id="vr-btn-label" value="EXPLORE 360 VIEW" align="center" position="0 0 0.01" scale="0.28 0.28 0.28" color="#0F172A"></a-text>
-        </a-plane>
-
-        <!-- VR Action Button: Return to Bird's Eye Aerial View -->
-        <a-plane id="vr-btn-birds-eye" class="clickable" width="1.15" height="0.2" position="0 -0.42 0.01" color="#FF7043">
-          <a-text value="RETURN TO BIRD'S EYE VIEW" align="center" position="0 0 0.01" scale="0.22 0.22 0.22" color="#FFFFFF"></a-text>
-        </a-plane>
-      </a-plane>
-    </a-entity>
-  </a-scene>
-
-  <!-- 2D SCREEN HUD OVERLAY (For Mobile / Desktop Browsers & Meta Quest 2D Web Window) -->
-  <div id="2d-hud" class="fixed inset-0 z-10 flex flex-col justify-between p-4 md:p-6 pointer-events-none">
-    
-    <!-- Top Header Bar -->
-    <div class="flex items-center justify-between w-full max-w-7xl mx-auto">
-      <div class="bg-slate-900/90 backdrop-blur-md border border-amber-500/30 rounded-2xl p-4 px-6 text-white shadow-2xl flex items-center space-x-4 pointer-events-auto">
-        <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-amber-400 font-bold text-lg">
-          PM
-        </div>
-        <div>
-          <h1 class="text-lg md:text-xl font-bold tracking-wide text-amber-400">Poorna Market Visualization</h1>
-          <p class="text-xs text-slate-400">Architectural WebVR 360 Viewer • Enscape Renders</p>
-        </div>
+<body>
+  <a class="skip-link" href="#main">Skip to market map</a>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Poorna Market, return to overview">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M3 22h26M6 22V12l10-7 10 7v10M10 22v-8h12v8M12 14v-3h8v3"/></svg></span>
+      <span><strong>Poorna Market</strong><small>Urban design proposal</small></span>
+    </a>
+    <nav class="top-nav" aria-label="Main navigation"><a href="#locations">Locations</a><button id="about-open" class="text-button" type="button">About the proposal</button></nav>
+  </header>
+  <main id="main">
+    <section id="overview" class="overview" aria-labelledby="overview-title">
+      <div class="section-head"><div><h1 id="overview-title">Explore Poorna Market</h1><p>The five points show design zones, placed approximately on the concept render.</p></div><span class="view-tag">Bird’s-eye view</span></div>
+      <div class="overview-layout">
+        <div class="map-frame"><img class="aerial" src="assets/aerial.webp" width="1536" height="1024" fetchpriority="high" alt="Bird’s-eye design visualization of Poorna Market with a prominent street entrance, internal courtyards, market streets and planted roofs."><div id="map-hotspots" class="map-hotspots" aria-label="Locations on the market plan"></div><span class="map-caption">Concept visualization · hotspot positions are illustrative</span></div>
+        <aside class="place-panel" aria-labelledby="panel-title"><span id="panel-index" class="panel-index"></span><div id="panel-icon" class="panel-icon" aria-hidden="true"></div><h2 id="panel-title"></h2><p id="panel-description"></p><p id="panel-feature" class="panel-feature"></p><button id="panel-go" class="primary-button" type="button">Go to This Location <span aria-hidden="true">↗</span></button><p class="panel-footnote">A design visualization of the proposal.</p></aside>
       </div>
-
-      <!-- Quick Action Buttons -->
-      <div class="flex items-center space-x-3 pointer-events-auto">
-        <button id="btn-reset-view" class="bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md border border-slate-700 text-slate-200 px-4 py-2.5 rounded-xl text-sm font-medium transition duration-200 flex items-center space-x-2 shadow-lg">
-          <i class="fa-solid fa-plane-departure text-amber-400"></i>
-          <span class="hidden sm:inline">Bird's-Eye Overview</span>
-        </button>
-        
-        <button id="btn-toggle-instructions" class="bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md border border-slate-700 text-slate-200 p-2.5 px-3 rounded-xl text-sm transition duration-200 shadow-lg" title="GitHub Setup & Instructions">
-          <i class="fa-solid fa-code text-amber-400"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Bottom Controls & Zone Selector Carousel -->
-    <div class="w-full max-w-5xl mx-auto my-2 pointer-events-auto">
-      <div class="bg-slate-900/90 backdrop-blur-md border border-slate-800 rounded-2xl p-4 text-white shadow-2xl">
-        
-        <div class="flex items-center justify-between mb-3 px-1">
-          <div class="flex items-center space-x-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
-            <span class="text-xs font-semibold tracking-wider text-slate-400 uppercase">Select Zone to Inspect</span>
-          </div>
-          <span id="current-view-badge" class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 font-medium">
-            Aerial Bird's Eye View
-          </span>
-        </div>
-
-        <!-- Zone Selector Buttons -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
-          <button data-zone="entrance" class="zone-card bg-slate-800/80 hover:bg-amber-500/20 border border-slate-700 hover:border-amber-500/50 p-3 rounded-xl text-left transition duration-200 group">
-            <div class="text-xs text-amber-400/80 font-medium">Zone 01</div>
-            <div class="text-sm font-bold text-slate-100 group-hover:text-amber-300 truncate">Main Entrance</div>
-          </button>
-
-          <button data-zone="courtyard" class="zone-card bg-slate-800/80 hover:bg-amber-500/20 border border-slate-700 hover:border-amber-500/50 p-3 rounded-xl text-left transition duration-200 group">
-            <div class="text-xs text-amber-400/80 font-medium">Zone 02</div>
-            <div class="text-sm font-bold text-slate-100 group-hover:text-amber-300 truncate">Central Courtyard</div>
-          </button>
-
-          <button data-zone="organic" class="zone-card bg-slate-800/80 hover:bg-amber-500/20 border border-slate-700 hover:border-amber-500/50 p-3 rounded-xl text-left transition duration-200 group">
-            <div class="text-xs text-amber-400/80 font-medium">Zone 03</div>
-            <div class="text-sm font-bold text-slate-100 group-hover:text-amber-300 truncate">Flower & Produce</div>
-          </button>
-
-          <button data-zone="arcade" class="zone-card bg-slate-800/80 hover:bg-amber-500/20 border border-slate-700 hover:border-amber-500/50 p-3 rounded-xl text-left transition duration-200 group">
-            <div class="text-xs text-amber-400/80 font-medium">Zone 04</div>
-            <div class="text-sm font-bold text-slate-100 group-hover:text-amber-300 truncate">Commercial Arcade</div>
-          </button>
-
-          <button data-zone="rooftop" class="zone-card bg-slate-800/80 hover:bg-amber-500/20 border border-slate-700 hover:border-amber-500/50 p-3 rounded-xl text-left transition duration-200 group">
-            <div class="text-xs text-amber-400/80 font-medium">Zone 05</div>
-            <div class="text-sm font-bold text-slate-100 group-hover:text-amber-300 truncate">Roof Terrace</div>
-          </button>
-        </div>
-
-      </div>
-    </div>
+    </section>
+    <section class="intro" aria-labelledby="page-title"><div class="intro-copy"><h2 id="page-title">A market made for the life around it.</h2><p>Explore a proposal for a connected public market, from its city-facing entrance to the shaded streets, shared plaza and planted roof.</p></div><div class="intro-note"><span class="note-line" aria-hidden="true"></span>Start with the bird’s-eye view. Select a point to look closer.</div></section>
+    <section id="walkthrough" class="walkthrough" aria-labelledby="walk-title" hidden>
+      <div class="walk-top"><button id="back-map" class="back-button" type="button"><span aria-hidden="true">←</span> Back to Bird’s-Eye View</button><span class="view-tag">Street-level scene</span></div>
+      <div class="walk-layout"><div class="walk-image-wrap"><img id="walk-image" src="assets/entrance.webp" width="2172" height="724" alt="Main entrance design visualization"><p id="image-error" role="alert" hidden>We couldn’t load this scene. Return to the bird’s-eye view or choose another location.</p><span class="visualization-label">Design visualization</span></div><div class="walk-info"><span id="walk-index" class="panel-index"></span><h1 id="walk-title"></h1><p id="walk-description"></p><div class="feature-block"><h2>Design intention</h2><p id="walk-feature"></p></div><div class="walk-actions"><button id="prev-place" class="secondary-button" type="button">Previous Location</button><button id="next-place" class="secondary-button" type="button">Next Location</button></div><button id="vr-button" class="vr-button" type="button">View in VR Headset <span aria-hidden="true">↗</span></button><p id="vr-status" class="status" role="status" aria-live="polite"></p></div></div>
+    </section>
+    <section id="locations" class="locations" aria-labelledby="locations-title"><div class="section-head"><div><h2 id="locations-title">Five Places to Explore</h2><p>Each view is a proposal image created from the project’s concept renders.</p></div></div><div id="location-list" class="location-list"></div></section>
+    <section class="intentions" aria-labelledby="intentions-title"><div><h2 id="intentions-title">A public place, not just a collection of stalls.</h2><p>The proposal brings market activity and everyday city life together through shaded routes, places to pause, planted edges and a mix of retail experiences.</p></div><div class="intention-list"><h3>Proposal Characteristics</h3><dl><div><dt>Scale</dt><dd>Urban-level market design proposal</dd></div><div><dt>Market program</dt><dd>Produce, textiles and small retail</dd></div><div><dt>Public realm</dt><dd>Street entrance, shaded routes, central plaza and planted roof</dd></div><div><dt>Measured specifications</dt><dd>Awaiting verified project drawings</dd></div></dl></div></section>
+  </main>
+  <footer><span>Poorna Market · Urban design proposal</span><span>Visuals illustrate design intent; dimensions and performance data await verified project drawings.</span></footer>
+  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-head"><h2 id="about-title">About the Proposal</h2><button id="about-close" class="icon-button" aria-label="Close about dialog" type="button">×</button></div><p>Poorna Market is presented here as an urban-level design proposal. The aerial view and street scenes illustrate a connected market experience in a broadly Indian context.</p><p>The five hotspots are approximate design zones on a concept render. These visuals are not a survey map or photographs of a completed place. No unverified measurements, capacities or environmental performance claims are presented.</p><p>In a compatible headset, VR mode displays these concept images as spatial panels. The scenes are not 360° panoramas.</p></dialog>
+  <div id="vr-shell" class="vr-shell" aria-hidden="true"><button id="vr-close" class="vr-close" type="button">Exit VR View</button>
+    <a-scene id="vr-scene" embedded vr-mode-ui="enabled: false" background="color: #202722" renderer="colorManagement: true" loading-screen="enabled: false">
+      <a-assets><img id="vr-image" src="assets/entrance.webp" width="2172" height="724" alt="" crossorigin="anonymous"></a-assets>
+      <a-entity position="0 0 0"><a-camera position="0 1.6 0" look-controls><a-cursor raycaster="objects: .vr-control" fuse="false" color="#E6AA30"></a-cursor></a-camera><a-entity laser-controls="hand: left" raycaster="objects: .vr-control"></a-entity><a-entity laser-controls="hand: right" raycaster="objects: .vr-control"></a-entity></a-entity>
+      <a-plane id="vr-panel" src="#vr-image" width="3.7" height="1.55" position="0 1.8 -3" material="shader: flat; side: double"></a-plane>
+      <a-text id="vr-title" value="Poorna Market" width="3.8" align="center" color="#F2EFE6" position="0 0.79 -3"></a-text>
+      <a-plane id="vr-prev" class="vr-control" width="0.9" height="0.3" position="-1.1 0.35 -3" color="#456C4D"><a-text value="Previous" align="center" width="2.6" position="0 0 0.01"></a-text></a-plane>
+      <a-plane id="vr-overview" class="vr-control" width="0.9" height="0.3" position="0 0.35 -3" color="#A64B35"><a-text value="Overview" align="center" width="2.6" position="0 0 0.01"></a-text></a-plane>
+      <a-plane id="vr-next" class="vr-control" width="0.9" height="0.3" position="1.1 0.35 -3" color="#456C4D"><a-text value="Next" align="center" width="2.6" position="0 0 0.01"></a-text></a-plane>
+    </a-scene>
   </div>
-
-  <!-- Developer Setup Modal (Instructions for GitHub Pages Deployment & VR Usage) -->
-  <div id="modal-instructions" class="fixed inset-0 z-30 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 text-slate-200 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-      
-      <button id="btn-close-modal" class="absolute top-4 right-4 text-slate-400 hover:text-white p-2">
-        <i class="fa-solid fa-xmark text-xl"></i>
-      </button>
-
-      <div class="flex items-center space-x-3 mb-4">
-        <div class="p-3 bg-amber-500/20 border border-amber-500/40 rounded-xl text-amber-400">
-          <i class="fa-brands fa-github text-2xl"></i>
-        </div>
-        <div>
-          <h2 class="text-xl font-bold text-white">GitHub Pages Deployment & VR Setup</h2>
-          <p class="text-xs text-slate-400">Host your own Enscape 360 panoramas for Meta Quest WebVR</p>
-        </div>
-      </div>
-
-      <div class="space-y-4 text-sm text-slate-300">
-        <div class="p-4 bg-slate-800/60 rounded-xl border border-slate-700">
-          <h3 class="font-semibold text-amber-400 mb-1"><i class="fa-solid fa-1 mr-2"></i>Exporting from Enscape</h3>
-          <p class="text-xs text-slate-400">Export your architectural renders as <b>360 Panorama (Equirectangular PNG/JPG)</b> at 4096x2048 resolution for optimal performance on Meta Quest headsets.</p>
-        </div>
-
-        <div class="p-4 bg-slate-800/60 rounded-xl border border-slate-700">
-          <h3 class="font-semibold text-amber-400 mb-1"><i class="fa-solid fa-2 mr-2"></i>Deploying to GitHub Pages</h3>
-          <ol class="list-disc list-inside text-xs text-slate-400 space-y-1">
-            <li>Create a new repository named <code class="text-amber-300">poorna-market-vr</code> on GitHub.</li>
-            <li>Upload this <code class="text-amber-300">index.html</code> file along with your exported 360 images.</li>
-            <li>Go to <b>Settings &gt; Pages</b>, select <code class="text-amber-300">main</code> branch and click Save.</li>
-            <li>HTTPS URL will be generated automatically (Required for Meta Quest WebXR APIs).</li>
-          </ol>
-        </div>
-
-        <div class="p-4 bg-slate-800/60 rounded-xl border border-slate-700">
-          <h3 class="font-semibold text-amber-400 mb-1"><i class="fa-solid fa-vr-cardboard mr-2"></i>Viewing on Meta Quest</h3>
-          <p class="text-xs text-slate-400">Open the Meta Quest Browser in your VR headset, navigate to your GitHub Pages URL, and click the <b>"Enter VR"</b> button at the bottom right corner.</p>
-        </div>
-      </div>
-
-      <div class="mt-6 text-right">
-        <button id="btn-dismiss-modal" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-5 py-2.5 rounded-xl text-sm transition">
-          Got it, return to viewer
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- JavaScript Architectural Viewer State Engine -->
-  <script>
-    // Zone Database with Metadata & Panorama Asset IDs
-    const ZONES = {
-      entrance: {
-        title: "Main Entrance Arch",
-        desc: "Features the grand parametric bamboo archway and reception plaza facing the main thoroughfare.",
-        assetId: "#pano-entrance",
-        markerId: "#marker-entrance",
-        occupancy: "Grand Portal • Public Plaza"
-      },
-      courtyard: {
-        title: "Central Courtyard & Plaza",
-        desc: "Open-air landscaped community space surrounded by terraced retail corridors.",
-        assetId: "#pano-courtyard",
-        markerId: "#marker-courtyard",
-        occupancy: "Gathering Space • Shaded Canopy"
-      },
-      organic: {
-        title: "Flower & Produce Market",
-        desc: "Naturally ventilated arcade housing organic vegetable, fruit, and spice vendors.",
-        assetId: "#pano-organic",
-        markerId: "#marker-organic",
-        occupancy: "Fresh Produce • Micro-Stalls"
-      },
-      arcade: {
-        title: "Commercial Arcade",
-        desc: "Double-height brick and timber arcade for traditional crafts, textiles, and local art.",
-        assetId: "#pano-arcade",
-        markerId: "#marker-arcade",
-        occupancy: "Retail • Craft Workshops"
-      },
-      rooftop: {
-        title: "Roof Terrace Garden",
-        desc: "Elevated green roof walkway offering panoramic views of the market courtyard below.",
-        assetId: "#pano-rooftop",
-        markerId: "#marker-rooftop",
-        occupancy: "Green Roof • Outdoor Seating"
-      }
-    };
-
-    let selectedZoneKey = 'entrance';
-    let currentMode = 'birds-eye'; // 'birds-eye' or 'ground'
-
-    // DOM Elements
-    const skybox = document.querySelector('#skybox');
-    const vrZoneTitle = document.querySelector('#vr-zone-title');
-    const vrZoneDesc = document.querySelector('#vr-zone-desc');
-    const vrBtnTeleport = document.querySelector('#vr-btn-teleport');
-    const vrBtnBirdsEye = document.querySelector('#vr-btn-birds-eye');
-    const currentViewBadge = document.querySelector('#current-view-badge');
-
-    // Switch Panorama with Smooth Fade Transition
-    function loadPanorama(assetId, modeName) {
-      // Trigger smooth fadeout animation
-      skybox.emit('fadeout');
-
-      setTimeout(() => {
-        skybox.setAttribute('src', assetId);
-        skybox.emit('fadein');
-        
-        currentMode = modeName;
-        if (modeName === 'birds-eye') {
-          currentViewBadge.textContent = "Aerial Bird's Eye View";
-          currentViewBadge.className = "text-xs px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 font-medium";
-        } else {
-          currentViewBadge.textContent = `360 Ground View (${ZONES[selectedZoneKey].title})`;
-          currentViewBadge.className = "text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-medium";
-        }
-      }, 350);
-    }
-
-    // Select Zone Function
-    function selectZone(zoneKey) {
-      if (!ZONES[zoneKey]) return;
-      selectedZoneKey = zoneKey;
-      const zone = ZONES[zoneKey];
-
-      // Update VR Spatial HUD Text
-      vrZoneTitle.setAttribute('value', zone.title);
-      vrZoneDesc.setAttribute('value', zone.desc);
-
-      // Highlight active zone cards in 2D UI
-      document.querySelectorAll('.zone-card').forEach(btn => {
-        if (btn.dataset.zone === zoneKey) {
-          btn.classList.add('border-amber-500', 'bg-amber-500/20');
-        } else {
-          btn.classList.remove('border-amber-500', 'bg-amber-500/20');
-        }
-      });
-    }
-
-    // Enter Ground 360 View for selected zone
-    function enterSelectedZoneGroundView() {
-      const zone = ZONES[selectedZoneKey];
-      if (zone) {
-        loadPanorama(zone.assetId, 'ground');
-      }
-    }
-
-    // Return to Main Aerial Bird's Eye Render
-    function returnToBirdsEye() {
-      loadPanorama('#poorna-aerial', 'birds-eye');
-      selectZone('entrance');
-    }
-
-    // Initialize Event Listeners when DOM & A-Frame scene are loaded
-    window.addEventListener('load', () => {
-      selectZone('entrance');
-
-      // Add click handlers for 3D spatial hotspot markers
-      document.querySelectorAll('.hotspot-marker').forEach(marker => {
-        marker.addEventListener('click', (evt) => {
-          const zoneKey = marker.dataset.zone;
-          selectZone(zoneKey);
-          enterSelectedZoneGroundView();
-        });
-      });
-
-      // VR HUD Panel Button Interactions
-      vrBtnTeleport.addEventListener('click', enterSelectedZoneGroundView);
-      vrBtnBirdsEye.addEventListener('click', returnToBirdsEye);
-
-      // 2D HUD UI Button Handlers
-      document.querySelectorAll('.zone-card').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const zoneKey = btn.dataset.zone;
-          selectZone(zoneKey);
-          enterSelectedZoneGroundView();
-        });
-      });
-
-      document.querySelector('#btn-reset-view').addEventListener('click', returnToBirdsEye);
-
-      // Instructions Modal Handlers
-      const modal = document.querySelector('#modal-instructions');
-      document.querySelector('#btn-toggle-instructions').addEventListener('click', () => modal.classList.remove('hidden'));
-      document.querySelector('#btn-close-modal').addEventListener('click', () => modal.classList.add('hidden'));
-      document.querySelector('#btn-dismiss-modal').addEventListener('click', () => modal.classList.add('hidden'));
-    });
-  </script>
 </body>
 </html>
