@@ -9,10 +9,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anek:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=7">
+  <link rel="stylesheet" href="styles.css?v=6">
   <script defer src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
   <script defer src="app.js?v=6"></script>
-  <script defer src="tour360.js?v=2"></script>
+  <script defer src="tour360.js?v=3"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to market map</a>
@@ -48,11 +48,11 @@
       <div id="tour-load" class="tour-load" role="status" aria-live="polite" hidden>Loading location…</div>
       <div id="tour-error" class="tour-error" role="alert" hidden><p>This panorama could not load.</p><button id="tour-retry" type="button">Retry panorama</button><button id="tour-error-next" type="button">Return to overview</button></div>
     </div>
-    <div class="tour-top"><div class="tour-brand"><strong>Poorna Market</strong><span>360° design tour</span></div><div class="tour-top-actions"><button id="vr-headset" type="button">Enter Headset</button><button id="vr-close" type="button">Overview</button></div></div>
-    <aside class="tour-info" id="tour-info" aria-labelledby="tour-title"><div class="tour-info-top"><span id="tour-index"></span><button id="tour-info-toggle" type="button" aria-expanded="false" aria-controls="tour-info-body">Inspect design <span aria-hidden="true">+</span></button></div><h2 id="tour-title"></h2><span id="tour-point-name" class="tour-point-name"></span><p id="tour-feature" class="tour-summary"></p><div id="tour-links" class="tour-links" aria-label="Connected standing points"></div><div id="tour-info-body" hidden><p id="tour-description"></p><div class="tour-detail-nav"><button id="tour-main-view" type="button" aria-pressed="true">Panorama</button><button id="tour-detail-view" type="button" aria-pressed="false">Detail study</button></div><div id="tour-study" class="tour-study" hidden><img id="tour-study-image" alt=""><p id="tour-detail-caption" class="tour-detail-caption"></p></div></div></aside>
+    <div class="tour-top"><div class="tour-brand"><strong>Poorna Market</strong><span>Urban design · 360° tour</span></div><div class="tour-top-actions"><button id="vr-headset" type="button">Enter Headset</button><button id="vr-close" type="button">Back to Bird’s-Eye View</button></div></div>
+    <aside class="tour-info" id="tour-info" aria-labelledby="tour-title"><div class="tour-info-top"><span id="tour-index"></span><button id="tour-info-toggle" type="button" aria-expanded="true" aria-controls="tour-info-body">Hide Story</button></div><div id="tour-info-body"><h2 id="tour-title"></h2><p id="tour-description"></p><div class="tour-intention"><span id="tour-point-name"></span><p id="tour-feature"></p></div><div class="tour-detail-nav"><button id="tour-main-view" type="button" aria-pressed="true">360° View</button><button id="tour-detail-view" type="button" aria-pressed="false">Design Detail</button></div><div id="tour-study" class="tour-study" hidden><img id="tour-study-image" alt=""><p id="tour-detail-caption" class="tour-detail-caption"></p></div><div id="tour-links" class="tour-links" aria-label="Connected standing points"></div></div></aside>
     <div class="tour-plan" id="tour-plan"><img src="assets/aerial.webp" width="1536" height="1024" alt="" aria-hidden="true"><div id="tour-plan-points"></div><span>Standing point · illustrative plan</span></div>
     <div class="tour-view-controls" aria-label="Panorama view controls"><button id="tour-reset" type="button">Reset view</button><button id="tour-zoom-in" type="button" aria-label="Zoom in">+</button><span id="tour-zoom-value">75°</span><button id="tour-zoom-out" type="button" aria-label="Zoom out">−</button></div>
-    <div class="tour-bottom"><p class="tour-help">Drag to turn · Select a place to travel</p><nav id="vr-places" class="tour-places" aria-label="Choose a market zone"></nav></div>
+    <div class="tour-bottom"><p class="tour-help">Look around: drag or touch · Move: select an arrow · Reset: R</p><nav id="vr-places" class="tour-places" aria-label="Tour locations"></nav></div>
     <div id="vr-toast" class="tour-toast" role="status" aria-live="polite"></div>
     <a-scene id="vr-scene" embedded vr-mode-ui="enabled: false" renderer="colorManagement: true; antialias: true" loading-screen="enabled: false" background="color: #F2EFE6">
       <a-sky id="vr-base-sky" color="#202722"></a-sky>

@@ -85,59 +85,41 @@ window.initMarketVr = function ({PLACES, setState, getCurrent}) {
     const a=angle*Math.PI/180;
     return (Math.sin(a)*radius).toFixed(3)+" "+height+" "+(-Math.cos(a)*radius).toFixed(3);
   }
-  function vrButton(label,angle,height,click) {
+  function vrButton(label,angle,height,click,color="#202722") {
     const group=entity("a-entity",gallery,{position:positionAt(angle,3.7,height),rotation:"0 "+(-angle)+" 0",class:"vr-ui"});
-    const plate=entity("a-plane",group,{class:"vr-control",width:1.08,height:.32,material:"shader: flat; color: #F2EFE6; side: double"});
-    entity("a-text",group,{value:label,align:"center",color:"#202722",width:2.4,position:"0 0 .012","wrap-count":18});
+    const plate=entity("a-plane",group,{class:"vr-control",width:1.3,height:.36,material:"shader: flat; color: "+color+"; side: double"});
+    entity("a-text",group,{value:label,align:"center",color:"#F2EFE6",width:2.8,position:"0 0 .012","wrap-count":20});
     plate.addEventListener("click",click);
-    plate.addEventListener("mouseenter",()=>plate.setAttribute("material","shader: flat; color: #E6AA30; side: double"));
-    plate.addEventListener("mouseleave",()=>plate.setAttribute("material","shader: flat; color: #F2EFE6; side: double"));
-  }
-  function vrMoveMarker(id,angle) {
-    const destination=byId[id];
-    const group=entity("a-entity",gallery,{position:positionAt(angle,3.7,.72),rotation:"0 "+(-angle)+" 0",class:"vr-ui"});
-    const disc=entity("a-circle",group,{class:"vr-control",radius:.25,material:"shader: flat; color: #E6AA30; side: double"});
-    entity("a-text",group,{value:">",align:"center",color:"#202722",width:1.5,position:"0 0 .012"});
-    entity("a-plane",group,{width:1.38,height:.29,position:".94 0 0",material:"shader: flat; color: #F2EFE6; side: double"});
-    entity("a-text",group,{value:destination.name,align:"center",color:"#202722",width:2.7,position:".94 0 .012","wrap-count":24});
-    disc.addEventListener("click",()=>show(destination));
-    disc.addEventListener("mouseenter",()=>disc.setAttribute("material","shader: flat; color: #A64B35; side: double"));
-    disc.addEventListener("mouseleave",()=>disc.setAttribute("material","shader: flat; color: #E6AA30; side: double"));
+    plate.addEventListener("mouseenter",()=>plate.setAttribute("material","shader: flat; color: #A64B35; side: double"));
+    plate.addEventListener("mouseleave",()=>plate.setAttribute("material","shader: flat; color: "+color+"; side: double"));
   }
   function buildVrMarkers() {
     gallery.replaceChildren();
-    active.links.forEach(([id,angle])=>vrMoveMarker(id,angle));
-    vrButton("Inspect",active.annotationYaw,2.02,()=>showNotes());
+    active.links.forEach(([id,angle])=>vrButton("Explore "+label(id),angle,.58,()=>show(byId[id]),"#456C4D"));
+    vrButton("Design idea: "+active.annotation,active.annotationYaw,2.05,()=>showNotes());
     vrButton("Overview",180,2.45,()=>close());
   }
-  function setDetails(open) {
-    $("tour-info-body").hidden=!open;
-    info.classList.toggle("expanded",open);
-    $("tour-info-toggle").setAttribute("aria-expanded",String(open));
-    $("tour-info-toggle").innerHTML=open
-      ? 'Close details <span aria-hidden="true">−</span>'
-      : 'Inspect design <span aria-hidden="true">+</span>';
-  }
   function showNotes() {
-    setDetails(true);
+    info.classList.remove("collapsed");
+    $("tour-info-toggle").setAttribute("aria-expanded","true");
+    $("tour-info-toggle").textContent="Hide Story";
     if(scene.is("vr-mode")) {
       gallery.querySelector(".vr-note")?.remove();
       const angle=active.annotationYaw;
-      const card=entity("a-entity",gallery,{class:"vr-note",position:positionAt(angle,2.5,1.65),rotation:"0 "+(-angle)+" 0"});
-      entity("a-plane",card,{width:1.88,height:1.38,material:"shader: flat; color: #F2EFE6; side: double"});
-      entity("a-plane",card,{width:1.88,height:.04,position:"0 .67 .012",material:"shader: flat; color: #A64B35; side: double"});
-      entity("a-image",card,{src:PLACES.find(p=>p.id===active.zone).detail,width:1.7,height:.61,position:"0 .31 .014"});
-      entity("a-text",card,{value:active.annotation,color:"#A64B35",width:1.88,align:"left",position:"-.84 -.10 .016","wrap-count":27});
-      entity("a-text",card,{value:active.note,color:"#202722",width:1.75,align:"left",position:"-.84 -.37 .016","wrap-count":35});
-      const close=entity("a-circle",card,{class:"vr-control",radius:.13,position:".73 .52 .020",material:"shader: flat; color: #456C4D; side: double"});
-      entity("a-text",card,{value:"x",color:"#F2EFE6",align:"center",width:.58,position:".73 .52 .030"});
+      const card=entity("a-entity",gallery,{class:"vr-note",position:positionAt(angle,2.3,1.65),rotation:"0 "+(-angle)+" 0"});
+      entity("a-plane",card,{width:2.15,height:1.68,material:"shader: flat; color: #F2EFE6; side: double"});
+      entity("a-image",card,{src:PLACES.find(p=>p.id===active.zone).detail,width:1.94,height:.82,position:"0 .29 .014"});
+      entity("a-text",card,{value:active.annotation,color:"#A64B35",width:2.2,align:"left",position:"-.94 -.22 .016","wrap-count":30});
+      entity("a-text",card,{value:active.note,color:"#202722",width:2.0,align:"left",position:"-.94 -.50 .016","wrap-count":38});
+      const close=entity("a-plane",card,{class:"vr-control",width:.45,height:.22,position:".76 -.70 .020",material:"shader: flat; color: #456C4D; side: double"});
+      entity("a-text",card,{value:"Close",color:"#F2EFE6",align:"center",width:1,position:".76 -.70 .030"});
       close.addEventListener("click",()=>card.remove());
     }
     announce(active.note);
   }
   function render() {
     const place=PLACES.find(p=>p.id===active.zone);
-    $("tour-index").textContent=String(PLACES.indexOf(place)+1).padStart(2,"0")+" / 05 · Point "+(active.id.endsWith("a")?"01":"02")+" / 02";
+    $("tour-index").textContent=String(PLACES.indexOf(place)+1).padStart(2,"0")+" / 05 · View "+(active.id.endsWith("a")?"01":"02")+" / 02";
     $("tour-title").textContent=place.name;
     $("tour-description").textContent=place.description;
     $("tour-feature").textContent=active.note;
@@ -146,7 +128,6 @@ window.initMarketVr = function ({PLACES, setState, getCurrent}) {
     $("tour-study-image").src=place.detail;
     $("tour-study-image").alt="Detail study: "+place.detailCaption;
     study.hidden=true;
-    setDetails(false);
     $("tour-main-view").setAttribute("aria-pressed","true");
     $("tour-detail-view").setAttribute("aria-pressed","false");
     nav.querySelectorAll("button").forEach(button=>{
@@ -158,20 +139,9 @@ window.initMarketVr = function ({PLACES, setState, getCurrent}) {
     });
     const links=$("tour-links"); links.replaceChildren();
     active.links.forEach(([id])=>{
-      const destination=byId[id];
       const button=document.createElement("button");
-      button.type="button";
-      button.className="tour-link";
+      button.type="button"; button.textContent="Explore → "+label(id);
       button.setAttribute("aria-label","Move to "+label(id));
-      const name=document.createElement("span");
-      name.textContent=destination.name;
-      const zone=document.createElement("small");
-      zone.textContent=PLACES.find(p=>p.id===destination.zone).short;
-      const arrow=document.createElement("span");
-      arrow.className="tour-link-arrow";
-      arrow.setAttribute("aria-hidden","true");
-      arrow.textContent="↗";
-      button.append(zone,name,arrow);
       button.addEventListener("click",()=>show(byId[id]));
       links.append(button);
     });
@@ -277,26 +247,7 @@ window.initMarketVr = function ({PLACES, setState, getCurrent}) {
   PLACES.forEach((place,index)=>{
     const button=document.createElement("button");
     button.type="button";button.dataset.zone=place.id;
-    button.className="tour-place-button";
-    const number=document.createElement("small");
-    number.textContent=String(index+1).padStart(2,"0");
-    const name=document.createElement("span");
-    name.textContent=place.short;
-    const preview=document.createElement("span");
-    preview.className="tour-place-preview";
-    preview.setAttribute("aria-hidden","true");
-    const image=document.createElement("img");
-    image.src=place.image;
-    image.alt="";
-    image.loading="lazy";
-    image.width=160;
-    image.height=90;
-    const caption=document.createElement("span");
-    caption.textContent=place.name;
-    const pointNames=document.createElement("small");
-    pointNames.textContent=points.filter(point=>point.zone===place.id).map(point=>point.name).join(" / ");
-    preview.append(image,caption,pointNames);
-    button.append(number,name,preview);
+    button.innerHTML="<small>"+String(index+1).padStart(2,"0")+"</small><span>"+place.short+"</span>";
     button.setAttribute("aria-label","Go to "+place.name);
     button.addEventListener("click",()=>show(first(place.id)));
     nav.append(button);
@@ -314,7 +265,11 @@ window.initMarketVr = function ({PLACES, setState, getCurrent}) {
   $("vr-launch").addEventListener("click",open);
   $("vr-button").addEventListener("click",open);
   $("vr-close").addEventListener("click",()=>close());
-  $("tour-info-toggle").addEventListener("click",()=>setDetails($("tour-info-body").hidden));
+  $("tour-info-toggle").addEventListener("click",()=>{
+    const collapsed=info.classList.toggle("collapsed");
+    $("tour-info-toggle").setAttribute("aria-expanded",String(!collapsed));
+    $("tour-info-toggle").textContent=collapsed?"Show Story":"Hide Story";
+  });
   $("tour-main-view").addEventListener("click",()=>{
     study.hidden=true;
     $("tour-main-view").setAttribute("aria-pressed","true");
