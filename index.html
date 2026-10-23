@@ -9,9 +9,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anek:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=3">
-  <script defer src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
-  <script defer src="app.js?v=2"></script>
+  <link rel="stylesheet" href="styles.css?v=4">
+  <script defer src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+  <script defer src="app.js?v=4"></script>
+  <script defer src="vr.js?v=1"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to market map</a>
@@ -27,28 +28,51 @@
       <div class="section-head"><div><h1 id="overview-title">Explore Poorna Market</h1><p>Hover over a marker to discover a place. Tap a marker on mobile.</p></div><span class="view-tag">Bird’s-eye view</span></div>
       <div class="overview-layout">
         <div id="map-frame" class="map-frame"><div class="map-image-region"><img class="aerial" src="assets/aerial.webp" width="1536" height="1024" fetchpriority="high" alt="Bird’s-eye design visualization of Poorna Market with a prominent street entrance, internal courtyards, market streets and planted roofs."><div id="map-hotspots" class="map-hotspots" aria-label="Locations on the market plan"></div></div><span class="map-caption">Concept visualization · hotspot positions are illustrative</span></div>
+        <button id="vr-launch" class="vr-launch" type="button">Explore the 3D market <span aria-hidden="true">↗</span></button>
         <aside id="place-panel" class="place-panel" aria-labelledby="panel-title" hidden><button id="panel-close" class="panel-close" type="button" aria-label="Close location information">×</button><span id="panel-index" class="panel-index"></span><div id="panel-icon" class="panel-icon" aria-hidden="true"></div><h2 id="panel-title"></h2><p id="panel-description"></p><p id="panel-feature" class="panel-feature"></p><button id="panel-go" class="primary-button" type="button">Go to This Location <span aria-hidden="true">↗</span></button><p class="panel-footnote">A design visualization of the proposal.</p></aside>
       </div>
     </section>
     <section class="intro" aria-labelledby="page-title"><div class="intro-copy"><h2 id="page-title">A market made for the life around it.</h2><p>Explore a proposal for a connected public market, from its city-facing entrance to the shaded streets, shared plaza and planted roof.</p></div><div class="intro-note"><span class="note-line" aria-hidden="true"></span>Start with the bird’s-eye view. Select a point to look closer.</div></section>
     <section id="walkthrough" class="walkthrough" aria-labelledby="walk-title" hidden>
       <div class="walk-top"><button id="back-map" class="back-button" type="button"><span aria-hidden="true">←</span> Back to Bird’s-Eye View</button><span class="view-tag">Street-level scene</span></div>
-      <div class="walk-layout"><div class="walk-image-wrap"><img id="walk-image" src="assets/entrance.webp" width="2172" height="724" alt="Main entrance design visualization"><p id="image-error" role="alert" hidden>We couldn’t load this scene. Return to the bird’s-eye view or choose another location.</p><span class="visualization-label">Design visualization</span></div><div class="walk-info"><span id="walk-index" class="panel-index"></span><h1 id="walk-title"></h1><p id="walk-description"></p><div class="feature-block"><h2>Design intention</h2><p id="walk-feature"></p></div><div class="walk-actions"><button id="prev-place" class="secondary-button" type="button">Previous Location</button><button id="next-place" class="secondary-button" type="button">Next Location</button></div><button id="vr-button" class="vr-button" type="button">View in VR Headset <span aria-hidden="true">↗</span></button><p id="vr-status" class="status" role="status" aria-live="polite"></p></div></div>
+      <div class="walk-layout"><div class="walk-image-wrap"><img id="walk-image" src="assets/entrance.webp" width="2172" height="724" alt="Main entrance design visualization"><p id="image-error" role="alert" hidden>We couldn’t load this scene. Return to the bird’s-eye view or choose another location.</p><span class="visualization-label">Design visualization</span></div><div class="walk-info"><span id="walk-index" class="panel-index"></span><h1 id="walk-title"></h1><p id="walk-description"></p><div class="feature-block"><h2>Design intention</h2><p id="walk-feature"></p></div><div class="walk-actions"><button id="prev-place" class="secondary-button" type="button">Previous Location</button><button id="next-place" class="secondary-button" type="button">Next Location</button></div><button id="vr-button" class="vr-button" type="button">Explore this place in 3D <span aria-hidden="true">↗</span></button><p id="vr-status" class="status" role="status" aria-live="polite"></p></div></div>
     </section>
     <section id="locations" class="locations" aria-labelledby="locations-title"><div class="section-head"><div><h2 id="locations-title">Five Places to Explore</h2><p>Each view is a proposal image created from the project’s concept renders.</p></div></div><div id="location-list" class="location-list"></div></section>
     <section class="intentions" aria-labelledby="intentions-title"><div><h2 id="intentions-title">A public place, not just a collection of stalls.</h2><p>The proposal brings market activity and everyday city life together through shaded routes, places to pause, planted edges and a mix of retail experiences.</p></div><div class="intention-list"><h3>Proposal Characteristics</h3><dl><div><dt>Scale</dt><dd>Urban-level market design proposal</dd></div><div><dt>Market program</dt><dd>Produce, textiles and small retail</dd></div><div><dt>Public realm</dt><dd>Street entrance, shaded routes, central plaza and planted roof</dd></div><div><dt>Measured specifications</dt><dd>Awaiting verified project drawings</dd></div></dl></div></section>
   </main>
   <footer><span>Poorna Market · Urban design proposal</span><span>Visuals illustrate design intent; dimensions and performance data await verified project drawings.</span></footer>
-  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-head"><h2 id="about-title">About the Proposal</h2><button id="about-close" class="icon-button" aria-label="Close about dialog" type="button">×</button></div><p>Poorna Market is presented here as an urban-level design proposal. The aerial view and street scenes illustrate a connected market experience in a broadly Indian context.</p><p>The five hotspots are approximate design zones on a concept render. These visuals are not a survey map or photographs of a completed place. No unverified measurements, capacities or environmental performance claims are presented.</p><p>In a compatible headset, VR mode displays these concept images as spatial panels. The scenes are not 360° panoramas.</p></dialog>
-  <div id="vr-shell" class="vr-shell" aria-hidden="true"><button id="vr-close" class="vr-close" type="button">Exit VR View</button>
-    <a-scene id="vr-scene" embedded vr-mode-ui="enabled: false" background="color: #202722" renderer="colorManagement: true" loading-screen="enabled: false">
-      <a-assets><img id="vr-image" src="assets/entrance.webp" width="2172" height="724" alt="" crossorigin="anonymous"></a-assets>
-      <a-entity position="0 0 0"><a-camera position="0 1.6 0" look-controls><a-cursor raycaster="objects: .vr-control" fuse="false" color="#E6AA30"></a-cursor></a-camera><a-entity laser-controls="hand: left" raycaster="objects: .vr-control"></a-entity><a-entity laser-controls="hand: right" raycaster="objects: .vr-control"></a-entity></a-entity>
-      <a-plane id="vr-panel" src="#vr-image" width="3.7" height="1.55" position="0 1.8 -3" material="shader: flat; side: double"></a-plane>
-      <a-text id="vr-title" value="Poorna Market" width="3.8" align="center" color="#F2EFE6" position="0 0.79 -3"></a-text>
-      <a-plane id="vr-prev" class="vr-control" width="0.9" height="0.3" position="-1.1 0.35 -3" color="#456C4D"><a-text value="Previous" align="center" width="2.6" position="0 0 0.01"></a-text></a-plane>
-      <a-plane id="vr-overview" class="vr-control" width="0.9" height="0.3" position="0 0.35 -3" color="#A64B35"><a-text value="Overview" align="center" width="2.6" position="0 0 0.01"></a-text></a-plane>
-      <a-plane id="vr-next" class="vr-control" width="0.9" height="0.3" position="1.1 0.35 -3" color="#456C4D"><a-text value="Next" align="center" width="2.6" position="0 0 0.01"></a-text></a-plane>
+  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-head"><h2 id="about-title">About the Proposal</h2><button id="about-close" class="icon-button" aria-label="Close about dialog" type="button">×</button></div><p>Poorna Market is presented here as an urban-level design proposal. The aerial view and street scenes illustrate a connected market experience in a broadly Indian context.</p><p>The five hotspots are approximate design zones on a concept render. These visuals are not a survey map or photographs of a completed place. No unverified measurements, capacities or environmental performance claims are presented.</p><p>The explorable 3D market is a conceptual model. Its building forms are diagrammatic, with proposal images displayed as spatial exhibits rather than 360° panoramas. A compatible WebXR headset enables controller travel and selection.</p></dialog>
+  <div id="vr-shell" class="vr-shell" role="dialog" aria-modal="true" aria-label="Interactive 3D market" aria-hidden="true">
+    <div class="vr-hud">
+      <div class="vr-hud-top"><div><strong>Poorna Market</strong><span>Interactive design model</span></div><div class="vr-hud-actions"><button id="vr-headset" type="button">Enter headset</button><button id="vr-close" type="button">Exit model</button></div></div>
+      <div class="vr-hud-bottom"><div class="vr-instructions">Look around · Select a marker to travel<br>Headset: point and trigger · Left stick moves · Right stick click changes place</div><nav id="vr-places" class="vr-places" aria-label="3D market locations"></nav><div class="vr-layers"><button id="vr-shade" type="button" aria-pressed="true">Shade on</button><button id="vr-route" type="button" aria-pressed="false">Show walking route</button><button id="vr-inspect" type="button">Inspect this place</button></div></div>
+      <div id="vr-toast" class="vr-toast" role="status" aria-live="polite"></div>
+    </div>
+    <a-scene id="vr-scene" embedded vr-mode-ui="enabled: false" background="color: #BDD0C6" renderer="colorManagement: true; antialias: true" loading-screen="enabled: false">
+      <a-assets>
+        <img id="vr-scene-entrance" src="assets/entrance.webp" alt="">
+        <img id="vr-scene-produce" src="assets/produce.webp" alt="">
+        <img id="vr-scene-plaza" src="assets/plaza.webp" alt="">
+        <img id="vr-scene-textiles" src="assets/textiles.webp" alt="">
+        <img id="vr-scene-roof" src="assets/roof.webp" alt="">
+      </a-assets>
+      <a-sky color="#BDD0C6"></a-sky>
+      <a-light type="ambient" color="#FFF4D8" intensity="0.95"></a-light>
+      <a-light type="directional" color="#FFF5D6" intensity="0.85" position="-3 8 5"></a-light>
+      <a-plane rotation="-90 0 0" width="28" height="28" color="#DDD6C2"></a-plane>
+      <a-entity id="market-model"></a-entity>
+      <a-entity id="vr-rig" position="0 0 9.4">
+        <a-camera id="vr-camera" position="0 1.65 0" look-controls wasd-controls="acceleration: 12">
+          <a-cursor id="vr-gaze" raycaster="objects: .vr-control; far: 18" fuse="false" color="#E6AA30" geometry="radiusInner: 0.008; radiusOuter: 0.014"></a-cursor>
+          <a-entity id="vr-wrist" position="0 -0.57 -1.45" rotation="-14 0 0" visible="false">
+            <a-plane width="1.2" height="0.36" color="#202722" opacity="0.92"></a-plane>
+            <a-text id="vr-wrist-title" value="Poorna Market" align="center" width="2.5" color="#F2EFE6" position="0 0.07 0.01"></a-text>
+            <a-text id="vr-wrist-hint" value="Point and trigger to explore" align="center" width="2.1" color="#E6AA30" position="0 -0.08 0.01"></a-text>
+          </a-entity>
+        </a-camera>
+        <a-entity id="vr-left-hand" laser-controls="hand: left" raycaster="objects: .vr-control; far: 18"></a-entity>
+        <a-entity id="vr-right-hand" laser-controls="hand: right" raycaster="objects: .vr-control; far: 18"></a-entity>
+      </a-entity>
     </a-scene>
   </div>
 </body>

@@ -52,9 +52,6 @@ function renderSelection() {
   });
   byId("prev-place").setAttribute("aria-label",`Previous location: ${PLACES[(index+3)%5].name}`);
   byId("next-place").setAttribute("aria-label",`Next location: ${PLACES[index%5].name}`);
-  byId("vr-title").setAttribute("value",current.name);
-  byId("vr-panel").setAttribute("src",current.image);
-  byId("vr-panel").setAttribute("height","1.55");
 }
 function showPanel(place) {
   current = place;
@@ -127,38 +124,6 @@ function buildNavigation() {
     locationList.append(card);
   });
 }
-function closeVr() {
-  const scene=byId("vr-scene");
-  if(scene.is("vr-mode"))scene.exitVR();
-  byId("vr-shell").classList.remove("active");
-  byId("vr-shell").setAttribute("aria-hidden","true");
-  byId("vr-status").textContent="";
-}
-function initVr() {
-  const scene=byId("vr-scene");
-  byId("vr-button").addEventListener("click",()=>{
-    if(!navigator.xr || !scene || typeof scene.enterVR!=="function"){
-      byId("vr-status").textContent="VR requires a compatible headset and browser. The walkthrough remains available here.";
-      return;
-    }
-    byId("vr-shell").classList.add("active");
-    byId("vr-shell").setAttribute("aria-hidden","false");
-    try{
-      const result=scene.enterVR();
-      if(result?.catch)result.catch(()=>{closeVr();byId("vr-status").textContent="VR could not start. Use a compatible headset browser to try again.";});
-    }catch{closeVr();byId("vr-status").textContent="VR could not start. Use a compatible headset browser to try again.";}
-  });
-  byId("vr-close").addEventListener("click",closeVr);
-  scene.addEventListener("exit-vr",closeVr);
-  byId("vr-prev").addEventListener("click",()=>neighbour(-1));
-  byId("vr-next").addEventListener("click",()=>neighbour(1));
-  byId("vr-overview").addEventListener("click",()=>{
-    setState(current,"overview",{scroll:false});
-    byId("vr-panel").setAttribute("src","assets/aerial.webp");
-    byId("vr-panel").setAttribute("height","2.45");
-    byId("vr-title").setAttribute("value","Bird’s-Eye Overview");
-  });
-}
 buildNavigation();
 const initial=stateFromUrl();
 setState(initial.place,initial.view,{push:false,scroll:false,showInfo:new URLSearchParams(location.search).has("zone")});
@@ -174,4 +139,4 @@ byId("about-open").addEventListener("click",()=>about.showModal());
 byId("about-close").addEventListener("click",()=>about.close());
 about.addEventListener("click",event=>{if(event.target===about)about.close();});
 window.addEventListener("popstate",()=>{const state=stateFromUrl();setState(state.place,state.view,{push:false});});
-window.addEventListener("load",initVr,{once:true});
+document.addEventListener("DOMContentLoaded",()=>window.initMarketVr?.({PLACES,setState,getCurrent:()=>current}),{once:true});

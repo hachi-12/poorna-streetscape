@@ -11,6 +11,24 @@
         ],
         "createdAt": "2026-10-22T20:08:10.417Z",
         "reason": "Agent: white overview text sits over a darkened aerial image and dark header in the rendered desktop and mobile views; static detector assumes the paper body background"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-10-23T09:14:44.235Z",
+        "reason": "Agent: walk-layout intentionally runs an image to its edge and its text is padded inside walk-info; intentions text is padded by the section layout as verified in browser"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-10-23T09:14:48.833Z",
+        "reason": "User specified limestone #F2EFE6 in the approved Poorna Market palette"
       }
     ]
   }

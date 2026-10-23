@@ -55,9 +55,37 @@ dialog{overscroll-behavior:contain}
   .place-panel h2{font-size:1.8rem;padding-right:32px}
   .place-panel p{font-size:.9rem}
   .place-panel .panel-footnote{display:none}
-  .map-caption{font-size:.75rem;max-width:43%;bottom:12px;left:12px}
+  .map-caption{font-size:.75rem;max-width:43%;bottom:104px;left:12px}
 }
 @media(max-width:650px){.intention-list dl>div{grid-template-columns:1fr;gap:3px}}
 [hidden]{display:none!important}
 @media(max-width:650px){.intro{padding-top:22px;padding-bottom:25px}.intro h1{font-size:clamp(2.3rem,9vw,3.5rem)}.intro-note{margin-top:12px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* The full-bleed model keeps the market visible; HTML controls mirror VR ray targets. */
+.vr-launch{position:absolute;z-index:5;left:clamp(18px,4vw,70px);bottom:54px;border:1px solid #e6aa30;background:#202722ed;color:#f2efe6;padding:13px 20px;min-height:48px;font-weight:600;box-shadow:0 12px 25px #1020186b}
+.vr-launch span{color:#e6aa30;margin-left:15px}
+.vr-launch:hover,.vr-launch:focus-visible{background:#334a39}
+.vr-open{overflow:hidden}
+.vr-shell{background:#bdd0c6}
+.vr-shell a-scene{position:absolute;inset:0;width:100%;height:100%}
+.vr-shell .a-enter-vr-button{display:none!important}
+.vr-hud{position:absolute;inset:0;z-index:3;pointer-events:none;color:#fff;display:flex;flex-direction:column;justify-content:space-between;padding:max(clamp(14px,2vw,28px),env(safe-area-inset-top)) max(clamp(14px,2vw,28px),env(safe-area-inset-right)) max(clamp(14px,2vw,28px),env(safe-area-inset-bottom)) max(clamp(14px,2vw,28px),env(safe-area-inset-left))}
+.vr-hud button{pointer-events:auto;border:1px solid #f2efe688;background:#202722e9;color:#f2efe6;min-height:44px;padding:9px 14px;font:inherit}
+.vr-hud button:hover,.vr-hud button[aria-current="true"],.vr-hud button[aria-pressed="true"]{background:#e6aa30;color:#202722;border-color:#e6aa30}
+.vr-hud-top,.vr-hud-bottom{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.vr-hud-top>div:first-child{background:#202722d9;padding:10px 15px}
+.vr-hud-top strong,.vr-hud-top span{display:block}
+.vr-hud-top strong{font-size:1.1rem}
+.vr-hud-top span{font-size:.8rem;color:#e0e7d9}
+.vr-hud-actions,.vr-places,.vr-layers{display:flex;gap:7px;pointer-events:auto;flex-wrap:wrap}
+.vr-hud-actions button:first-child{background:#456c4df0}
+.vr-hud-bottom{align-items:flex-end}
+.vr-instructions{background:#202722dc;line-height:1.35;padding:11px 14px;font-size:.85rem;max-width:245px}
+.vr-places{max-width:450px;justify-content:center}
+.vr-place-button{white-space:nowrap}
+.vr-layers{max-width:260px;justify-content:flex-end}
+.vr-toast{position:absolute;left:50%;top:18%;transform:translateX(-50%);background:#202722ef;color:#f2efe6;padding:13px 18px;max-width:min(480px,85vw);text-align:center;line-height:1.35;opacity:0;transition:opacity .2s;pointer-events:none}
+.vr-toast.shown{opacity:1}
+@media(max-width:900px){.vr-hud-bottom{display:block}.vr-instructions{display:none}.vr-places{max-width:none;margin-bottom:8px;justify-content:flex-start}.vr-layers{max-width:none;justify-content:flex-start}.vr-hud-actions{justify-content:flex-end}}
+@media(max-width:650px){.vr-launch{left:12px;bottom:43px;padding:10px 12px;font-size:.83rem}.vr-hud{padding:10px}.vr-hud-top strong{font-size:.95rem}.vr-hud-top span{font-size:.7rem}.vr-hud button{font-size:.78rem;padding:7px 9px}.vr-place-button{flex:1 0 auto}.vr-layers button{flex:1}.vr-toast{top:22%}}
