@@ -1,9 +1,9 @@
 const PLACES = [
-  {id:"entrance",name:"Market Entrance",short:"Entrance",image:"assets/entrance.webp",x:50,y:68,description:"A generous threshold connects the surrounding street to the market’s internal pedestrian routes.",feature:"A shaded arrival edge, planted forecourt and clear crossings frame the public entrance.",alt:"Visualized market entrance with a brick and bamboo gateway, shaded pedestrian forecourt, street traffic and visitors.",icon:"gate"},
-  {id:"produce",name:"Fresh Produce Street",short:"Produce",image:"assets/produce.webp",x:78,y:48,description:"Small produce and flower stalls animate a walkable market street with a strong sense of everyday exchange.",feature:"Trees, overhead shade and a continuous walking route support browsing and movement.",alt:"Visualized produce street with vegetables, flowers, vendors, shoppers and shade sails.",icon:"produce"},
-  {id:"plaza",name:"Central Plaza",short:"Plaza",image:"assets/plaza.webp",x:49,y:38,description:"A shared court offers a place to pause between the market streets and surrounding retail edges.",feature:"Planted seating and open circulation make the plaza a social centre of the proposal.",alt:"Visualized central plaza with planted seating, shaded market edges and people gathering.",icon:"plaza"},
-  {id:"textiles",name:"Textile & Retail Street",short:"Textiles",image:"assets/textiles.webp",x:27,y:39,description:"A retail lane brings fabric and small shops into a shaded, pedestrian-focused streetscape.",feature:"A continuous route links shopfront activity with places to sit and meet.",alt:"Visualized textile street with fabric stalls, shoppers, trees and a shaded pedestrian route.",icon:"textile"},
-  {id:"roof",name:"Roof Promenade",short:"Roof",image:"assets/roof.webp",x:51,y:17,description:"An elevated walk overlooks the markets, planted courtyards and the urban neighbourhood around them.",feature:"Planting, seating and pergolas extend public life onto the roof.",alt:"Visualized planted roof promenade looking over the market courtyards and surrounding streets.",icon:"roof"}
+  {id:"entrance",name:"Market Entrance",short:"Entrance",image:"assets/entrance.webp",detail:"assets/entrance-study.webp",detailCaption:"A closer study of the brick threshold, woven shade and planted arrival edge.",pinLabel:"Brick Threshold",x:50,y:68,description:"A generous threshold connects the surrounding street to the market’s internal pedestrian routes.",feature:"A shaded arrival edge, planted forecourt and clear crossings frame the public entrance.",alt:"Visualized market entrance with a brick and bamboo gateway, shaded pedestrian forecourt, street traffic and visitors.",icon:"gate"},
+  {id:"produce",name:"Fresh Produce Street",short:"Produce",image:"assets/produce.webp",detail:"assets/produce-study.webp",detailCaption:"Produce, flowers and shade make the walking route an active market street.",pinLabel:"Shaded Market Route",x:78,y:48,description:"Small produce and flower stalls animate a walkable market street with a strong sense of everyday exchange.",feature:"Trees, overhead shade and a continuous walking route support browsing and movement.",alt:"Visualized produce street with vegetables, flowers, vendors, shoppers and shade sails.",icon:"produce"},
+  {id:"plaza",name:"Central Plaza",short:"Plaza",image:"assets/plaza.webp",detail:"assets/plaza-study.webp",detailCaption:"Planted seating brings a pause into the circulation between market streets.",pinLabel:"Planted Seating",x:49,y:38,description:"A shared court offers a place to pause between the market streets and surrounding retail edges.",feature:"Planted seating and open circulation make the plaza a social centre of the proposal.",alt:"Visualized central plaza with planted seating, shaded market edges and people gathering.",icon:"plaza"},
+  {id:"textiles",name:"Textile & Retail Street",short:"Textiles",image:"assets/textiles.webp",detail:"assets/textiles-study.webp",detailCaption:"Fabric displays, shaded shopfronts and planting animate the retail lane.",pinLabel:"Retail Edge",x:27,y:39,description:"A retail lane brings fabric and small shops into a shaded, pedestrian-focused streetscape.",feature:"A continuous route links shopfront activity with places to sit and meet.",alt:"Visualized textile street with fabric stalls, shoppers, trees and a shaded pedestrian route.",icon:"textile"},
+  {id:"roof",name:"Roof Promenade",short:"Roof",image:"assets/roof.webp",detail:"assets/roof-study.webp",detailCaption:"Pergola shade and planting frame views across the market and nearby streets.",pinLabel:"Pergola and Planting",x:51,y:17,description:"An elevated walk overlooks the markets, planted courtyards and the urban neighbourhood around them.",feature:"Planting, seating and pergolas extend public life onto the roof.",alt:"Visualized planted roof promenade looking over the market courtyards and surrounding streets.",icon:"roof"}
 ];
 const ICONS = {
   gate:'<svg viewBox="0 0 48 48"><path d="M5 39h38M9 39V19C9 11 15 6 24 6s15 5 15 13v20M17 39V23a7 7 0 0 1 14 0v16"/></svg>',
@@ -26,7 +26,7 @@ let imageRequest = 0;
 
 function stateFromUrl() {
   const params = new URLSearchParams(location.search);
-  return {place:PLACES.find(place=>place.id===params.get("zone")) || PLACES[0],view:params.get("view")==="walkthrough" ? "walkthrough":"overview"};
+  return {place:PLACES.find(place=>place.id===params.get("zone")) || PLACES[0],view:["walkthrough","tour"].includes(params.get("view")) ? params.get("view"):"overview"};
 }
 function writeUrl(place,view,replace=false) {
   const url = new URL(location.href);
@@ -85,7 +85,7 @@ function setState(place,view,{push=true,scroll=true,showInfo=true}={}) {
   current = place;
   mode = view;
   renderSelection();
-  const isWalk = view==="walkthrough";
+  const isWalk = view!=="overview";
   document.body.classList.toggle("overview-mode",!isWalk);
   walkthrough.hidden = !isWalk;
   overview.hidden = isWalk;
@@ -138,5 +138,5 @@ const about=byId("about-dialog");
 byId("about-open").addEventListener("click",()=>about.showModal());
 byId("about-close").addEventListener("click",()=>about.close());
 about.addEventListener("click",event=>{if(event.target===about)about.close();});
-window.addEventListener("popstate",()=>{const state=stateFromUrl();setState(state.place,state.view,{push:false});});
+window.addEventListener("popstate",()=>{const state=stateFromUrl();setState(state.place,state.view,{push:false,scroll:state.view!=="tour"});window.dispatchEvent(new CustomEvent("tourstatechange",{detail:state}));});
 document.addEventListener("DOMContentLoaded",()=>window.initMarketVr?.({PLACES,setState,getCurrent:()=>current}),{once:true});
