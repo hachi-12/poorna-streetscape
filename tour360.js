@@ -95,14 +95,14 @@ window.initMarketVr = function ({PLACES, setState, getCurrent}) {
   }
   function buildVrMarkers() {
     gallery.replaceChildren();
-    active.links.forEach(([id,angle])=>vrButton("Explore "+label(id),angle,.58,()=>show(byId[id]),"#456C4D"));
-    vrButton("Design idea: "+active.annotation,active.annotationYaw,2.05,()=>showNotes());
+    active.links.forEach(([id,angle])=>vrButton("Go: "+label(id),angle,.58,()=>show(byId[id]),"#456C4D"));
+    vrButton("Inspect: "+active.annotation,active.annotationYaw,2.05,()=>showNotes());
     vrButton("Overview",180,2.45,()=>close());
   }
   function showNotes() {
     info.classList.remove("collapsed");
     $("tour-info-toggle").setAttribute("aria-expanded","true");
-    $("tour-info-toggle").textContent="Hide Story";
+    $("tour-info-toggle").textContent="Hide Notes";
     if(scene.is("vr-mode")) {
       gallery.querySelector(".vr-note")?.remove();
       const angle=active.annotationYaw;
@@ -119,7 +119,7 @@ window.initMarketVr = function ({PLACES, setState, getCurrent}) {
   }
   function render() {
     const place=PLACES.find(p=>p.id===active.zone);
-    $("tour-index").textContent=String(PLACES.indexOf(place)+1).padStart(2,"0")+" / 05 · View "+(active.id.endsWith("a")?"01":"02")+" / 02";
+    $("tour-index").textContent="Location "+String(PLACES.indexOf(place)+1).padStart(2,"0")+" / 05 · point "+(active.id.endsWith("a")?"01":"02")+" / 02";
     $("tour-title").textContent=place.name;
     $("tour-description").textContent=place.description;
     $("tour-feature").textContent=active.note;
@@ -140,7 +140,7 @@ window.initMarketVr = function ({PLACES, setState, getCurrent}) {
     const links=$("tour-links"); links.replaceChildren();
     active.links.forEach(([id])=>{
       const button=document.createElement("button");
-      button.type="button"; button.textContent="Explore → "+label(id);
+      button.type="button"; button.textContent="➜ "+label(id);
       button.setAttribute("aria-label","Move to "+label(id));
       button.addEventListener("click",()=>show(byId[id]));
       links.append(button);
@@ -268,7 +268,7 @@ window.initMarketVr = function ({PLACES, setState, getCurrent}) {
   $("tour-info-toggle").addEventListener("click",()=>{
     const collapsed=info.classList.toggle("collapsed");
     $("tour-info-toggle").setAttribute("aria-expanded",String(!collapsed));
-    $("tour-info-toggle").textContent=collapsed?"Show Story":"Hide Story";
+    $("tour-info-toggle").textContent=collapsed?"Show Notes":"Hide Notes";
   });
   $("tour-main-view").addEventListener("click",()=>{
     study.hidden=true;
