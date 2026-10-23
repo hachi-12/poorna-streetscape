@@ -26,12 +26,13 @@ let imageRequest = 0;
 
 function stateFromUrl() {
   const params = new URLSearchParams(location.search);
-  return {place:PLACES.find(place=>place.id===params.get("zone")) || PLACES[0],view:["walkthrough","tour"].includes(params.get("view")) ? params.get("view"):"overview"};
+  return {place:PLACES.find(place=>place.id===params.get("zone")) || PLACES[0],view:["walkthrough","tour"].includes(params.get("view")) ? params.get("view"):"overview",point:params.get("point")};
 }
 function writeUrl(place,view,replace=false) {
   const url = new URL(location.href);
   url.searchParams.set("zone",place.id);
   url.searchParams.set("view",view);
+  if(view!=="tour")url.searchParams.delete("point");
   history[replace?"replaceState":"pushState"]({zone:place.id,view},"",url);
 }
 function renderSelection() {

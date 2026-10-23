@@ -173,3 +173,35 @@ dialog{overscroll-behavior:contain}
   .tour-step button{padding:6px;font-size:1.05rem}
 }
 @media(prefers-reduced-motion:reduce){.tour-toast{transition:none}}
+
+/* Full-circle panorama is the visual field; navigation and notes stay quiet. */
+.vr-shell.active a-scene{visibility:visible;pointer-events:auto;z-index:1}
+.vr-shell.headset-active a-scene{z-index:20}
+.tour-stage{z-index:2;pointer-events:none;cursor:default}
+.tour-image-label{position:absolute;right:clamp(16px,2vw,32px);top:100px;z-index:3;background:#202722db;color:#f2efe6;padding:7px 11px;font-size:.76rem}
+.tour-load,.tour-error{pointer-events:auto}
+.tour-info{bottom:127px;max-height:min(62svh,560px)}
+.tour-info .tour-intention>span{letter-spacing:.03em}
+.tour-study{margin-top:14px}
+.tour-study img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid #a6b59c}
+.tour-links{border-top:1px solid #798877;display:grid;gap:6px;margin-top:16px;padding-top:12px;max-height:128px;overflow-y:auto}
+.tour-links button{font:inherit;text-align:left;border:1px solid #acbbaa;background:#354639;color:#f2efe6;min-height:40px;padding:6px 10px}
+.tour-links button:hover,.tour-links button:focus-visible{background:#456c4d}
+.tour-view-controls{position:absolute;z-index:5;right:max(20px,env(safe-area-inset-right));bottom:calc(318px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:4px;background:#202722e9;padding:5px;color:#f2efe6}
+.tour-view-controls button{font:inherit;border:1px solid #b4c0ae;background:#202722;color:#f2efe6;min-height:40px;min-width:40px;padding:5px 9px}
+.tour-view-controls button:hover{background:#456c4d}
+.tour-view-controls span{min-width:38px;text-align:center;font-size:.8rem}
+.tour-plan{width:230px}
+.tour-plan button[aria-current="true"]{z-index:2;box-shadow:0 0 0 3px #202722,0 0 0 5px #e6aa30}
+.vr-shell button:focus-visible{outline:3px solid #e6aa30;outline-offset:3px}
+@media(max-width:900px){.tour-view-controls{bottom:291px}.tour-info{bottom:105px}}
+@media(max-width:650px){
+  .tour-image-label{top:69px;right:12px;max-width:160px;text-align:right}
+  .tour-view-controls{right:12px;top:82px;bottom:auto}
+  .tour-view-controls button{font-size:.75rem;min-height:40px;min-width:38px}
+  .tour-info{bottom:91px;max-height:40svh}
+  .tour-links{max-height:86px}
+  .tour-plan{display:block;left:12px;right:auto;top:83px;bottom:auto;width:122px;border-width:2px}
+  .tour-plan button{width:16px;height:16px;font-size:.55rem;border-width:1px}
+  .tour-plan>span{font-size:.61rem;bottom:-22px;white-space:nowrap}
+}
