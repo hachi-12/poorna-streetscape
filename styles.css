@@ -93,6 +93,8 @@ dialog{overscroll-behavior:contain}
 /* Architectural tour: the proposal image is the room, annotations are the pin-up. */
 .vr-shell{background:var(--ink);color:var(--paper);font-family:"Anek",system-ui,sans-serif;overflow:hidden;overscroll-behavior:contain}
 .tour-stage,.tour-image-frame{position:absolute;inset:0;overflow:hidden}
+.tour-stage{touch-action:none;cursor:grab}
+.tour-stage:active{cursor:grabbing}
 .tour-image-frame{background:#718273}
 .tour-image-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#101a14b8 0%,transparent 23%,transparent 64%,#101a14bf 100%);pointer-events:none}
 .tour-image-frame img{width:100%;height:100%;object-fit:cover;object-position:50% center;max-width:none;display:block;user-select:none;-webkit-user-drag:none}
