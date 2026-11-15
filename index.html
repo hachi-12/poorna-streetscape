@@ -13,6 +13,8 @@
   <script defer src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
   <script defer src="app.js?v=6"></script>
   <script defer src="tour360.js?v=4"></script>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+  <script defer src="drawings.js?v=1"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to market map</a>
@@ -21,7 +23,7 @@
       <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M3 22h26M6 22V12l10-7 10 7v10M10 22v-8h12v8M12 14v-3h8v3"/></svg></span>
       <span><strong>Poorna Market</strong><small>Urban design proposal</small></span>
     </a>
-    <nav class="top-nav" aria-label="Main navigation"><a href="#locations">Locations</a><button id="about-open" class="text-button" type="button">About the proposal</button></nav>
+    <nav class="top-nav" aria-label="Main navigation"><a href="#locations">Locations</a><a href="#model">3D Model</a><a href="#elevations">Elevations</a><button id="about-open" class="text-button" type="button">About the proposal</button></nav>
   </header>
   <main id="main">
     <section id="overview" class="overview" aria-labelledby="overview-title">
@@ -38,9 +40,24 @@
       <div class="walk-layout"><div class="walk-image-wrap"><img id="walk-image" src="assets/entrance.webp" width="2172" height="724" alt="Main entrance design visualization"><p id="image-error" role="alert" hidden>We couldn’t load this scene. Return to the bird’s-eye view or choose another location.</p><span class="visualization-label">Design visualization</span></div><div class="walk-info"><span id="walk-index" class="panel-index"></span><h1 id="walk-title"></h1><p id="walk-description"></p><div class="feature-block"><h2>Design intention</h2><p id="walk-feature"></p></div><div class="walk-actions"><button id="prev-place" class="secondary-button" type="button">Previous Location</button><button id="next-place" class="secondary-button" type="button">Next Location</button></div><button id="vr-button" class="vr-button" type="button">Enter the immersive tour <span aria-hidden="true">↗</span></button><p id="vr-status" class="status" role="status" aria-live="polite"></p></div></div>
     </section>
     <section id="locations" class="locations" aria-labelledby="locations-title"><div class="section-head"><div><h2 id="locations-title">Five Places to Explore</h2><p>Each view is a proposal image created from the project’s concept renders.</p></div></div><div id="location-list" class="location-list"></div></section>
-    <section class="intentions" aria-labelledby="intentions-title"><div><h2 id="intentions-title">A public place, not just a collection of stalls.</h2><p>The proposal brings market activity and everyday city life together through shaded routes, places to pause, planted edges and a mix of retail experiences.</p></div><div class="intention-list"><h3>Proposal Characteristics</h3><dl><div><dt>Scale</dt><dd>Urban-level market design proposal</dd></div><div><dt>Market program</dt><dd>Produce, textiles and small retail</dd></div><div><dt>Public realm</dt><dd>Street entrance, shaded routes, central plaza and planted roof</dd></div><div><dt>Measured specifications</dt><dd>Awaiting verified project drawings</dd></div></dl></div></section>
+    <section id="model" class="model-section" aria-labelledby="model-title">
+      <div class="section-head"><div><h2 id="model-title">The Building in 3D</h2><p>Drag to orbit, scroll or pinch to zoom, right-drag to pan.</p></div><span class="view-tag">Interactive model</span></div>
+      <div class="model-frame">
+        <model-viewer id="model-viewer" src="assets/model/poorna-market.glb" alt="Interactive 3D model of the Poorna Market building" camera-controls touch-action="pan-y" shadow-intensity="0.6" exposure="0.9" camera-orbit="-30deg 62deg 175m" camera-target="0m 6m 0m" min-camera-orbit="auto 5deg 25m" max-camera-orbit="auto 88deg 450m" environment-image="neutral" interaction-prompt="auto" loading="lazy">
+        </model-viewer>
+        <span class="visualization-label">3D model from the project’s SketchUp file</span>
+      </div>
+    </section>
+    <section id="elevations" class="elevations" aria-labelledby="elev-title">
+      <div class="section-head"><div><h2 id="elev-title">Elevations</h2><p>Select a drawing to view it full size.</p></div></div>
+      <div class="elevation-list">
+        <figure class="elevation-card"><button type="button" class="elevation-open" data-src="assets/elevations/front.webp" data-title="Front elevation" aria-label="Open front elevation full size"><img src="assets/elevations/front.webp" width="3514" height="1090" loading="lazy" alt="Front elevation of the Poorna Market building, showing a patterned screen on the left and mural panels with the Poorna Market sign on the right"></button><figcaption>Front elevation</figcaption></figure>
+      </div>
+    </section>
+    <section class="intentions" aria-labelledby="intentions-title"><div><h2 id="intentions-title">A public place, not just a collection of stalls.</h2><p>The proposal brings market activity and everyday city life together through shaded routes, places to pause, planted edges and a mix of retail experiences.</p></div><div class="intention-list"><h3>Proposal Characteristics</h3><dl><div><dt>Scale</dt><dd>Urban-level market design proposal</dd></div><div><dt>Market program</dt><dd>Produce, textiles and small retail</dd></div><div><dt>Public realm</dt><dd>Street entrance, shaded routes, central plaza and planted roof</dd></div><div><dt>Drawings</dt><dd>3D model and front elevation below; further elevations to follow</dd></div></dl></div></section>
   </main>
   <footer><span>Poorna Market · Urban design proposal</span><span>Visuals illustrate design intent; dimensions and performance data await verified project drawings.</span></footer>
+  <dialog id="elev-dialog" class="elev-dialog" aria-labelledby="elev-dialog-title"><div class="dialog-head"><h2 id="elev-dialog-title">Elevation</h2><button id="elev-close" class="icon-button" aria-label="Close elevation" type="button">×</button></div><div class="elev-scroll"><img id="elev-dialog-img" alt=""></div><p class="elev-hint">Click the drawing to zoom to full size.</p></dialog>
   <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-head"><h2 id="about-title">About the Proposal</h2><button id="about-close" class="icon-button" aria-label="Close about dialog" type="button">×</button></div><p>Poorna Market is an urban-level design proposal. The aerial view and street scenes illustrate a connected market experience in a broadly Indian context.</p><p>The five map points indicate approximate design zones, not surveyed coordinates. Images are design visualizations rather than photographs of a completed place; measured dimensions and performance claims await verified drawings.</p><p>The 360° tour presents ten interpretive standing points, two in each zone. Select an arrow to jump between them in a browser or compatible WebXR headset. They show design intent, not a surveyed route or photographic site documentation.</p></dialog>
   <div id="vr-shell" class="vr-shell" role="dialog" aria-modal="true" aria-label="Poorna Market immersive tour" aria-hidden="true">
     <div class="tour-stage" id="tour-stage">
