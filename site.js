@@ -5,7 +5,7 @@
 
   // Camera views (orbit = theta phi radius, target = x y z in model metres).
   const VIEWS = {
-    hero:     {orbit: '-30deg 58deg 230m', target: '10m 4m 0m'},
+    hero:     matchMedia('(max-width: 900px)').matches ? {orbit: '-30deg 60deg 400m', target: '10m -95m 30m'} : {orbit: '-30deg 58deg 230m', target: '10m 4m 0m'},
     concept:  {orbit: '-35deg 52deg 270m', target: '10m 6m 0m'},
     entrance: {orbit: '60deg 84deg 15m',   target: '35m 5m 6m'},
     street:   {orbit: '0deg 86deg 40m',    target: '45m 3m 2m'},
@@ -30,6 +30,7 @@
 
   if (mv) {
     if (reduceMotion) mv.removeAttribute('auto-rotate');
+    mv.cameraOrbit = VIEWS.hero.orbit; mv.cameraTarget = VIEWS.hero.target;
     const loader = document.getElementById('loader');
     const loaderText = document.getElementById('loader-text');
     mv.addEventListener('progress', e => {
@@ -86,11 +87,11 @@
 
   // Market zones (same five places as the walkthrough and 360° tour).
   const ZONES = [
-    {id: 'entrance', name: 'Market Entrance', img: 'assets/entrance.webp', c: '#e3432b'},
-    {id: 'produce', name: 'Fresh Produce Street', img: 'assets/produce.webp', c: '#ffb81c'},
-    {id: 'plaza', name: 'Central Plaza', img: 'assets/plaza.webp', c: '#0e7c86'},
-    {id: 'textiles', name: 'Textile & Retail Street', img: 'assets/textiles.webp', c: '#c92a68'},
-    {id: 'roof', name: 'Roof Promenade', img: 'assets/roof.webp', c: '#14956b'}
+    {id: 'entrance', name: 'Market Entrance', img: 'assets/renders/entrance.webp', c: '#ff6a1a', alt: 'Render of the main frontage from the street, with terraces, planters and the hawker street beyond'},
+    {id: 'produce', name: 'Fresh Produce Street', img: 'assets/renders/produce.webp', c: '#ffd23f', alt: 'Render of the hawker street with produce stalls, push-carts, umbrellas and bunting'},
+    {id: 'plaza', name: 'Central Atrium', img: 'assets/renders/plaza.webp', c: '#4fd69c', alt: 'Render inside the market looking into the octagonal atrium'},
+    {id: 'textiles', name: 'Textile & Retail Street', img: 'assets/renders/textiles.webp', c: '#d9c8ff', alt: 'Render of the shophouses with open shopfronts, awnings and balconies'},
+    {id: 'roof', name: 'Roof & Skyline', img: 'assets/renders/roof.webp', c: '#4a8dff', alt: 'Aerial render of the market roof and the hawker street alongside'}
   ];
   const grid = document.getElementById('zone-grid');
   if (grid) {
@@ -99,7 +100,7 @@
       a.className = 'zone';
       a.href = `tour.html?zone=${z.id}&view=walkthrough`;
       a.style.setProperty('--c', z.c);
-      a.innerHTML = `<img src="${z.img}" width="640" height="360" loading="lazy" alt=""><span><small>Zone ${String(i + 1).padStart(2, '0')}</small>${z.name}</span>`;
+      a.innerHTML = `<img src="${z.img}" width="1280" height="720" loading="lazy" alt="${z.alt}"><span><small>Zone ${String(i + 1).padStart(2, '0')}</small><br>${z.name}</span>`;
       grid.appendChild(a);
     });
   }

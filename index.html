@@ -3,27 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#1d2b36">
-  <meta name="description" content="Poorna Market, Visakhapatnam, reimagined as a breathable bazaar. Explore the proposal in 3D: the side entrance, the hawker street and the market zones.">
-  <title>Poorna Market | A Breathable Bazaar in 3D</title>
+  <meta name="theme-color" content="#fbfaf6">
+  <meta name="description" content="Poorna Market, Visakhapatnam, reimagined as a breathable bazaar. Explore the proposal in 3D and walk through it in VR.">
+  <title>Poorna Market | A Breathable Bazaar in 3D &amp; VR</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anek:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="site.css?v=1">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="site.css?v=2">
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
-  <script defer src="site.js?v=1"></script>
+  <script defer src="site.js?v=2"></script>
 </head>
 <body class="at-hero">
   <a class="skip-link" href="#story">Skip to content</a>
 
   <header class="site-header">
     <a class="brand" href="#top" aria-label="Poorna Market, back to top">
-      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M3 22h26M6 22V12l10-7 10 7v10M10 22v-8h12v8M12 14v-3h8v3"/></svg></span>
+      <span class="headset" aria-hidden="true"></span>
       <span><strong>Poorna Market</strong><small>Visakhapatnam · design proposal</small></span>
     </a>
     <nav class="top-nav" aria-label="Main navigation">
       <a href="#concept">Concept</a><a href="#entrance">Entrance</a><a href="#street">Hawker street</a><a href="#zones">Zones</a><a href="#drawings">Drawings</a>
-      <a class="nav-cta" href="tour.html?zone=entrance&amp;view=tour">360° tour</a>
+      <a class="key key-lav" href="tour.html?zone=entrance&amp;view=tour">360° tour</a>
+      <a class="key key-orange" href="vr.html">Walk in VR</a>
     </nav>
   </header>
 
@@ -32,95 +33,131 @@
     <model-viewer id="mv" src="assets/model/poorna-market.glb"
       alt="Interactive 3D model of the Poorna Market proposal with its hawker street, shops and side entrance"
       camera-controls touch-action="pan-y" auto-rotate auto-rotate-delay="0" rotation-per-second="6deg"
-      interaction-prompt="none" shadow-intensity="0.7" exposure="0.95" environment-image="neutral"
+      interaction-prompt="none" shadow-intensity="0.9" shadow-softness="0.7" exposure="1.0" environment-image="neutral"
       camera-orbit="-30deg 58deg 230m" camera-target="10m 4m 0m" field-of-view="38deg"
       min-camera-orbit="auto 5deg 8m" max-camera-orbit="auto 89deg 420m" interpolation-decay="140" loading="eager">
       <button class="hotspot" slot="hotspot-entrance" data-position="35.6m 10m 6m" data-normal="1m 0m 0m" data-go="entrance"><span>Side entrance</span></button>
       <button class="hotspot" slot="hotspot-street" data-position="45m 7.5m -24m" data-normal="0m 1m 0m" data-go="street"><span>Hawker street</span></button>
-      <button class="hotspot" slot="hotspot-roof" data-position="-6m 21m -10m" data-normal="0m 1m 0m" data-go="zones"><span>Planted roof</span></button>
+      <button class="hotspot" slot="hotspot-roof" data-position="-6m 21m -10m" data-normal="0m 1m 0m" data-go="zones"><span>Atrium &amp; roof</span></button>
       <button class="hotspot" slot="hotspot-front" data-position="-5m 8m 41.5m" data-normal="0m 0m 1m" data-go="drawings"><span>Main frontage</span></button>
     </model-viewer>
-    <div class="loader" id="loader" role="status" aria-live="polite"><span class="loader-ring" aria-hidden="true"></span><span id="loader-text">Loading the 3D market… 0%</span></div>
+    <div class="loader" id="loader" role="status" aria-live="polite"><span class="headset big" aria-hidden="true"></span><span id="loader-text">Loading the 3D market… 0%</span></div>
     <div class="stage-ui">
       <div class="view-chips" role="group" aria-label="Jump to a view">
-        <button type="button" data-go="concept">Aerial</button><button type="button" data-go="entrance">Entrance</button><button type="button" data-go="street">Street</button><button type="button" data-go="drawings">Front</button>
+        <button type="button" class="key key-cream" data-go="concept">Aerial</button><button type="button" class="key key-cream" data-go="entrance">Entrance</button><button type="button" class="key key-cream" data-go="street">Street</button><button type="button" class="key key-cream" data-go="drawings">Front</button>
       </div>
-      <p class="stage-help">Drag to orbit · scroll or pinch to zoom · right-drag to pan</p>
+      <a class="key key-orange stage-vr" href="vr.html">Walk in VR <span aria-hidden="true">↗</span></a>
     </div>
   </div>
 
   <main id="top">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <span class="kicker">Poorna Market · Visakhapatnam</span>
-        <h1 id="hero-title">A breathable <em>bazaar</em>.</h1>
-        <p>A proposal for the city’s oldest market: open edges, shaded lanes, a planted roof, and a street of hawkers that runs straight into the market.</p>
+        <span class="tag">Poorna Market · Visakhapatnam</span>
+        <h1 id="hero-title">A breathable <mark>bazaar</mark>.</h1>
+        <p>A proposal for the city’s oldest market: open edges, shaded lanes, an atrium that breathes, and a street of hawkers that runs straight into the market. Spin it, zoom in, then step inside.</p>
         <div class="hero-actions">
-          <a class="btn btn-sun" href="#concept">Explore in 3D <span aria-hidden="true">↓</span></a>
-          <a class="btn btn-ghost" href="tour.html?zone=entrance&amp;view=tour">Take the 360° tour <span aria-hidden="true">↗</span></a>
+          <a class="key key-yellow big" href="#concept">Explore in 3D <span aria-hidden="true">↓</span></a>
+          <a class="key key-orange big" href="vr.html">Walk in VR <span aria-hidden="true">↗</span></a>
+          <a class="key key-lav big" href="tour.html?zone=entrance&amp;view=tour">360° tour</a>
         </div>
       </div>
-      <a class="scroll-cue" href="#concept" aria-label="Scroll to the story"><span></span></a>
+      <p class="hero-hint"><span class="drag-icon" aria-hidden="true"></span>Drag the model to spin it</p>
     </section>
 
     <div class="story" id="story">
       <section class="chapter" id="concept" data-view="concept" aria-labelledby="c-concept">
-        <span class="chapter-num">01</span>
+        <span class="chapter-num key key-orange" aria-hidden="true">01</span>
         <h2 id="c-concept">The idea</h2>
         <p class="lead">Poorna Market works because it is open. You can read the lanes at a glance, find shade where you want to linger, and goods spill right up to the street. The proposal keeps that spirit and lets the building breathe with it.</p>
         <ol class="principles">
-          <li><span class="dot d1" aria-hidden="true">1</span><div><h3>Open edges</h3><p>Stalls, steps and thresholds meet the street, so the market reads as part of the city, not a wall against it.</p></div></li>
-          <li><span class="dot d2" aria-hidden="true">2</span><div><h3>Shaded, airy routes</h3><p>Covered lanes and a central plaza give people places to pause and room for air and light to move through.</p></div></li>
-          <li><span class="dot d3" aria-hidden="true">3</span><div><h3>Planted layers</h3><p>Green terraces and the planted roof soften the building and lift a garden above the market.</p></div></li>
+          <li><span class="dot key key-yellow" aria-hidden="true">1</span><div><h3>Open edges</h3><p>Stalls, steps and thresholds meet the street, so the market reads as part of the city, not a wall against it.</p></div></li>
+          <li><span class="dot key key-green" aria-hidden="true">2</span><div><h3>Shaded, airy routes</h3><p>Covered lanes and a central atrium give people places to pause and room for air and light to move through.</p></div></li>
+          <li><span class="dot key key-blue" aria-hidden="true">3</span><div><h3>Planted layers</h3><p>Green terraces soften the building and bring planting up the facade.</p></div></li>
         </ol>
       </section>
 
-      <section class="chapter chapter-pink" id="entrance" data-view="entrance" aria-labelledby="c-entrance">
-        <span class="chapter-num">02</span>
+      <section class="chapter" id="entrance" data-view="entrance" aria-labelledby="c-entrance">
+        <span class="chapter-num key key-lav" aria-hidden="true">02</span>
         <h2 id="c-entrance">The side entrance</h2>
         <p class="lead">A brick gateway with a woven shade canopy and a marigold toran opens the market onto the hawker street. The forecourt in front is a place to arrive, meet and spill out, not just a doorway.</p>
         <ul class="facts">
-          <li><strong>Brick piers</strong> echo the market’s existing brickwork.</li>
+          <li><strong>Brick piers</strong> echo the market’s brickwork.</li>
           <li><strong>Woven canopy</strong> shades the threshold and lets air through.</li>
           <li><strong>Planted forecourt</strong> with trees on either side of the gate.</li>
         </ul>
+        <a class="key key-orange go-vr" href="vr.html?spot=entrance">Stand at the gate in VR <span aria-hidden="true">↗</span></a>
       </section>
 
-      <section class="chapter chapter-sun" id="street" data-view="street" aria-labelledby="c-street">
-        <span class="chapter-num">03</span>
+      <section class="chapter" id="street" data-view="street" aria-labelledby="c-street">
+        <span class="chapter-num key key-yellow" aria-hidden="true">03</span>
         <h2 id="c-street">The hawker street</h2>
         <p class="lead">The side road becomes a pedestrian bazaar. Produce stalls line the market edge, push-carts with umbrellas sit in the middle, and the shophouses opposite keep their open fronts, signboards and balconies, all strung together with festival bunting.</p>
         <div class="street-legend" aria-label="What you can see on the street">
           <span><i style="background:#e3432b"></i>Produce stalls</span><span><i style="background:#2a6fdb"></i>Push-carts</span><span><i style="background:#0e7c86"></i>Shopfront awnings</span><span><i style="background:#c9673f"></i>Paved lane</span>
         </div>
+        <a class="key key-orange go-vr" href="vr.html?spot=street">Walk the street in VR <span aria-hidden="true">↗</span></a>
         <p class="note">Shops, stalls and people are an illustrative context model added to the proposal, not a survey of the existing street.</p>
       </section>
 
       <section class="chapter" id="zones" data-view="zones" aria-labelledby="c-zones">
-        <span class="chapter-num">04</span>
+        <span class="chapter-num key key-green" aria-hidden="true">04</span>
         <h2 id="c-zones">Five places to explore</h2>
-        <p class="lead">Step inside the proposal through the concept renders. Each one opens the walkthrough, and from there you can enter the 360° tour.</p>
+        <p class="lead">Rendered straight from the 3D market model. Each card opens the walkthrough, and from there you can enter the 360° tour.</p>
         <div class="zone-grid" id="zone-grid"></div>
       </section>
 
+      <section class="chapter chapter-vr" id="vr" data-view="street" aria-labelledby="c-vr">
+        <span class="chapter-num key key-orange" aria-hidden="true">05</span>
+        <div class="vr-split">
+          <div>
+            <h2 id="c-vr">Step inside in VR</h2>
+            <p class="lead">Put on a headset, or just use your browser, and walk through the market at eye level. Teleport between the hawker street, the side entrance, the shopfronts, the atrium and the roof, and tap the coral <b>i</b> points to learn what you’re looking at.</p>
+            <ul class="how">
+              <li><span class="key key-cream mini">W A S D</span> walk on a laptop</li>
+              <li><span class="key key-cream mini">▲ ▼</span> hold the arrows on a phone</li>
+              <li><span class="key key-cream mini">Stick</span> walk and turn in a headset</li>
+            </ul>
+            <a class="key key-orange big" href="vr.html">Start the VR walk <span aria-hidden="true">↗</span></a>
+          </div>
+          <svg class="vr-figure" viewBox="0 0 400 400" role="img" aria-label="Illustration: a person wearing a VR headset inside a grid room, with an arrow circling around them">
+            <g fill="none" stroke="#111" stroke-width="2">
+              <rect x="110" y="90" width="180" height="160"/>
+              <path d="M0 0L110 90M400 0L290 90M0 400L110 250M400 400L290 250"/>
+              <path d="M146 90V250M182 90V250M218 90V250M254 90V250M110 122H290M110 154H290M110 186H290M110 218H290" stroke-opacity=".5"/>
+              <path d="M0 60L110 122M0 130L110 154M0 220L110 186M0 300L110 218M400 60L290 122M400 130L290 154M400 220L290 186M400 300L290 218" stroke-opacity=".5"/>
+              <path d="M146 250L100 400M182 250L170 400M218 250L230 400M254 250L300 400M60 290H340M20 340H380" stroke-opacity=".5"/>
+            </g>
+            <path d="M200 140c-34 0-52 24-52 54 0 20 8 36 20 46-38 10-66 38-72 80l-4 80h216l-4-80c-6-42-34-70-72-80 12-10 20-26 20-46 0-30-18-54-52-54z" fill="#111"/>
+            <rect x="142" y="176" width="116" height="38" rx="12" fill="#e8684a" stroke="#111" stroke-width="3"/>
+            <path d="M188 214c4-8 20-8 24 0" fill="#111"/>
+            <g fill="none" stroke="#e8684a" stroke-width="7" stroke-linecap="round">
+              <path d="M150 232C70 236 40 246 44 258c6 18 70 28 132 28"/>
+              <path d="M250 232c80 4 110 14 106 26-6 18-70 28-132 28"/>
+            </g>
+            <path d="M176 286l-18-10 2 22zM224 286l18-10-2 22z" fill="#e8684a"/>
+          </svg>
+        </div>
+      </section>
+
       <section class="chapter" id="drawings" data-view="drawings" aria-labelledby="c-drawings">
-        <span class="chapter-num">05</span>
+        <span class="chapter-num key key-blue" aria-hidden="true">06</span>
         <h2 id="c-drawings">Drawings</h2>
         <p class="lead">The front elevation, taken from the project drawings. Select it to view full size.</p>
         <figure class="drawing"><button type="button" class="drawing-open" data-src="assets/elevations/front.webp" data-title="Front elevation" aria-label="Open the front elevation full size"><img src="assets/elevations/front.webp" width="3514" height="1090" loading="lazy" alt="Front elevation of the Poorna Market building: a patterned screen on the left, stepped terraces in the middle, and mural panels with the Poorna Market sign on the right"></button><figcaption>Front elevation</figcaption></figure>
       </section>
 
       <section class="chapter chapter-ink" id="about" data-view="about" aria-labelledby="c-about">
-        <span class="chapter-num">06</span>
+        <span class="chapter-num key key-yellow" aria-hidden="true">07</span>
         <h2 id="c-about">About the proposal</h2>
         <dl class="spec">
           <div><dt>Site</dt><dd>Poorna Market, One Town, Visakhapatnam</dd></div>
           <div><dt>Scale</dt><dd>Urban-level market design proposal</dd></div>
-          <div><dt>Programme</dt><dd>Produce, textiles and small retail, plaza, planted roof</dd></div>
-          <div><dt>Public realm</dt><dd>Side entrance, hawker street, shaded routes, central plaza</dd></div>
+          <div><dt>Programme</dt><dd>Produce, textiles and small retail, atrium, roof</dd></div>
+          <div><dt>Public realm</dt><dd>Side entrance, hawker street, shaded routes, atrium</dd></div>
         </dl>
-        <p class="note">The 3D model is converted from the project’s SketchUp file and simplified for the web. Renders and the 360° tour are design visualizations, not photographs. Zone positions are approximate, and environmental performance has not been measured.</p>
-        <a class="btn btn-sun" href="tour.html?zone=entrance&amp;view=tour">Enter the 360° tour <span aria-hidden="true">↗</span></a>
+        <p class="note">The 3D model is converted from the project’s SketchUp file and simplified for the web. Zone images are renders of that model; the walkthrough and 360° tour use concept visualizations. Zone positions are approximate, and environmental performance has not been measured.</p>
+        <div class="ink-actions"><a class="key key-orange big" href="vr.html">Walk in VR <span aria-hidden="true">↗</span></a><a class="key key-lav big" href="tour.html?zone=entrance&amp;view=tour">360° tour</a></div>
       </section>
 
       <footer class="footer"><span>Poorna Market · A breathable bazaar</span><span>Urban design proposal, Visakhapatnam</span></footer>
