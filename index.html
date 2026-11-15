@@ -3,90 +3,134 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#202722">
-  <meta name="description" content="Explore the Poorna Market urban design proposal from above and at street level.">
-  <title>Poorna Market | An Urban Design Walkthrough</title>
+  <meta name="theme-color" content="#1d2b36">
+  <meta name="description" content="Poorna Market, Visakhapatnam, reimagined as a breathable bazaar. Explore the proposal in 3D: the side entrance, the hawker street and the market zones.">
+  <title>Poorna Market | A Breathable Bazaar in 3D</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anek:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=7">
-  <script defer src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
-  <script defer src="app.js?v=6"></script>
-  <script defer src="tour360.js?v=4"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Anek:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="site.css?v=1">
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
-  <script defer src="drawings.js?v=1"></script>
+  <script defer src="site.js?v=1"></script>
 </head>
-<body>
-  <a class="skip-link" href="#main">Skip to market map</a>
+<body class="at-hero">
+  <a class="skip-link" href="#story">Skip to content</a>
+
   <header class="site-header">
-    <a class="brand" href="./" aria-label="Poorna Market, return to overview">
+    <a class="brand" href="#top" aria-label="Poorna Market, back to top">
       <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M3 22h26M6 22V12l10-7 10 7v10M10 22v-8h12v8M12 14v-3h8v3"/></svg></span>
-      <span><strong>Poorna Market</strong><small>Urban design proposal</small></span>
+      <span><strong>Poorna Market</strong><small>Visakhapatnam · design proposal</small></span>
     </a>
-    <nav class="top-nav" aria-label="Main navigation"><a href="#locations">Locations</a><a href="#concept">Concept</a><a href="#model">3D Model</a><a href="#elevations">Elevations</a><button id="about-open" class="text-button" type="button">About the proposal</button></nav>
+    <nav class="top-nav" aria-label="Main navigation">
+      <a href="#concept">Concept</a><a href="#entrance">Entrance</a><a href="#street">Hawker street</a><a href="#zones">Zones</a><a href="#drawings">Drawings</a>
+      <a class="nav-cta" href="tour.html?zone=entrance&amp;view=tour">360° tour</a>
+    </nav>
   </header>
-  <main id="main">
-    <section id="overview" class="overview" aria-labelledby="overview-title">
-      <div class="section-head"><div><h1 id="overview-title">Explore Poorna Market</h1><p>Hover over a marker to discover a place. Tap a marker on mobile.</p></div><span class="view-tag">Bird’s-eye view</span></div>
-      <div class="overview-layout">
-        <div id="map-frame" class="map-frame"><div class="map-image-region"><img class="aerial" src="assets/aerial.webp" width="1536" height="1024" fetchpriority="high" alt="Bird’s-eye design visualization of Poorna Market with a prominent street entrance, internal courtyards, market streets and planted roofs."><div id="map-hotspots" class="map-hotspots" aria-label="Locations on the market plan"></div></div><span class="map-caption">Concept visualization · hotspot positions are illustrative</span></div>
-        <button id="vr-launch" class="vr-launch" type="button">Enter the immersive tour <span aria-hidden="true">↗</span></button>
-        <aside id="place-panel" class="place-panel" aria-labelledby="panel-title" hidden><button id="panel-close" class="panel-close" type="button" aria-label="Close location information">×</button><span id="panel-index" class="panel-index"></span><div id="panel-icon" class="panel-icon" aria-hidden="true"></div><h2 id="panel-title"></h2><p id="panel-description"></p><p id="panel-feature" class="panel-feature"></p><button id="panel-go" class="primary-button" type="button">Go to This Location <span aria-hidden="true">↗</span></button><p class="panel-footnote">A design visualization of the proposal.</p></aside>
+
+  <!-- One 3D model for the whole site: full-screen on the landing page, docked to the left while you read. -->
+  <div class="stage" id="stage">
+    <model-viewer id="mv" src="assets/model/poorna-market.glb"
+      alt="Interactive 3D model of the Poorna Market proposal with its hawker street, shops and side entrance"
+      camera-controls touch-action="pan-y" auto-rotate auto-rotate-delay="0" rotation-per-second="6deg"
+      interaction-prompt="none" shadow-intensity="0.7" exposure="0.95" environment-image="neutral"
+      camera-orbit="-30deg 58deg 230m" camera-target="10m 4m 0m" field-of-view="38deg"
+      min-camera-orbit="auto 5deg 8m" max-camera-orbit="auto 89deg 420m" interpolation-decay="140" loading="eager">
+      <button class="hotspot" slot="hotspot-entrance" data-position="35.6m 10m 6m" data-normal="1m 0m 0m" data-go="entrance"><span>Side entrance</span></button>
+      <button class="hotspot" slot="hotspot-street" data-position="45m 7.5m -24m" data-normal="0m 1m 0m" data-go="street"><span>Hawker street</span></button>
+      <button class="hotspot" slot="hotspot-roof" data-position="-6m 21m -10m" data-normal="0m 1m 0m" data-go="zones"><span>Planted roof</span></button>
+      <button class="hotspot" slot="hotspot-front" data-position="-5m 8m 41.5m" data-normal="0m 0m 1m" data-go="drawings"><span>Main frontage</span></button>
+    </model-viewer>
+    <div class="loader" id="loader" role="status" aria-live="polite"><span class="loader-ring" aria-hidden="true"></span><span id="loader-text">Loading the 3D market… 0%</span></div>
+    <div class="stage-ui">
+      <div class="view-chips" role="group" aria-label="Jump to a view">
+        <button type="button" data-go="concept">Aerial</button><button type="button" data-go="entrance">Entrance</button><button type="button" data-go="street">Street</button><button type="button" data-go="drawings">Front</button>
       </div>
-    </section>
-    <section class="intro" aria-labelledby="page-title"><div class="intro-copy"><h2 id="page-title">A market made for the life around it.</h2><p>Explore a proposal for a connected public market, from its city-facing entrance to the shaded streets, shared plaza and planted roof.</p></div><div class="intro-note"><span class="note-line" aria-hidden="true"></span>Start with the bird’s-eye view. Select a point to look closer.</div></section>
-    <section id="walkthrough" class="walkthrough" aria-labelledby="walk-title" hidden>
-      <div class="walk-top"><button id="back-map" class="back-button" type="button"><span aria-hidden="true">←</span> Back to Bird’s-Eye View</button><span class="view-tag">Street-level scene</span></div>
-      <div class="walk-layout"><div class="walk-image-wrap"><img id="walk-image" src="assets/entrance.webp" width="2172" height="724" alt="Main entrance design visualization"><p id="image-error" role="alert" hidden>We couldn’t load this scene. Return to the bird’s-eye view or choose another location.</p><span class="visualization-label">Design visualization</span></div><div class="walk-info"><span id="walk-index" class="panel-index"></span><h1 id="walk-title"></h1><p id="walk-description"></p><div class="feature-block"><h2>Design intention</h2><p id="walk-feature"></p></div><div class="walk-actions"><button id="prev-place" class="secondary-button" type="button">Previous Location</button><button id="next-place" class="secondary-button" type="button">Next Location</button></div><button id="vr-button" class="vr-button" type="button">Enter the immersive tour <span aria-hidden="true">↗</span></button><p id="vr-status" class="status" role="status" aria-live="polite"></p></div></div>
-    </section>
-    <section id="locations" class="locations" aria-labelledby="locations-title"><div class="section-head"><div><h2 id="locations-title">Five Places to Explore</h2><p>Each view is a proposal image created from the project’s concept renders.</p></div></div><div id="location-list" class="location-list"></div></section>
-    <section id="concept" class="concept" aria-labelledby="concept-title">
-      <div class="concept-inner">
-        <div class="concept-lead"><span class="concept-kicker">The idea</span><h2 id="concept-title">A breathable bazaar</h2><p>Poorna Market works because it is open: lanes you can read at a glance, shade where you want to linger, goods spilling to the edge of the street. The proposal keeps that spirit and lets the building breathe with it.</p></div>
-        <ol class="concept-list">
-          <li><span class="concept-dot" aria-hidden="true">1</span><h3>Open edges</h3><p>Stalls, steps and thresholds meet the street, so the market reads as part of the city rather than a wall against it.</p></li>
-          <li><span class="concept-dot" aria-hidden="true">2</span><h3>Shaded, airy routes</h3><p>Covered lanes and a central plaza give people places to pause and room for air and light to move through.</p></li>
-          <li><span class="concept-dot" aria-hidden="true">3</span><h3>Planted layers</h3><p>Green terraces and the planted roof soften the building and bring a garden up above the market.</p></li>
-        </ol>
-        <p class="concept-note">Design intent only; environmental performance has not been measured.</p>
-      </div>
-    </section>
-    <section id="model" class="model-section" aria-labelledby="model-title">
-      <div class="section-head"><div><h2 id="model-title">The Building in 3D</h2><p>Drag to orbit, scroll or pinch to zoom, right-drag to pan.</p></div><span class="view-tag">Interactive model</span></div>
-      <div class="model-frame">
-        <model-viewer id="model-viewer" src="assets/model/poorna-market.glb" alt="Interactive 3D model of the Poorna Market building" camera-controls touch-action="pan-y" shadow-intensity="0.6" exposure="0.9" camera-orbit="-30deg 62deg 175m" camera-target="0m 6m 0m" min-camera-orbit="auto 5deg 25m" max-camera-orbit="auto 88deg 450m" environment-image="neutral" interaction-prompt="auto" loading="lazy">
-        </model-viewer>
-        <span class="visualization-label">3D model from the project’s SketchUp file</span>
-      </div>
-    </section>
-    <section id="elevations" class="elevations" aria-labelledby="elev-title">
-      <div class="section-head"><div><h2 id="elev-title">Elevations</h2><p>Select a drawing to view it full size.</p></div></div>
-      <div class="elevation-list">
-        <figure class="elevation-card"><button type="button" class="elevation-open" data-src="assets/elevations/front.webp" data-title="Front elevation" aria-label="Open front elevation full size"><img src="assets/elevations/front.webp" width="3514" height="1090" loading="lazy" alt="Front elevation of the Poorna Market building, showing a patterned screen on the left and mural panels with the Poorna Market sign on the right"></button><figcaption>Front elevation</figcaption></figure>
-      </div>
-    </section>
-    <section class="intentions" aria-labelledby="intentions-title"><div><h2 id="intentions-title">A public place, not just a collection of stalls.</h2><p>The proposal brings market activity and everyday city life together through shaded routes, places to pause, planted edges and a mix of retail experiences.</p></div><div class="intention-list"><h3>Proposal Characteristics</h3><dl><div><dt>Scale</dt><dd>Urban-level market design proposal</dd></div><div><dt>Market program</dt><dd>Produce, textiles and small retail</dd></div><div><dt>Public realm</dt><dd>Street entrance, shaded routes, central plaza and planted roof</dd></div><div><dt>Drawings</dt><dd>3D model and front elevation above; further elevations to follow</dd></div></dl></div></section>
-  </main>
-  <footer><span>Poorna Market · Urban design proposal</span><span>Visuals illustrate design intent; dimensions and performance data await verified project drawings.</span></footer>
-  <dialog id="elev-dialog" class="elev-dialog" aria-labelledby="elev-dialog-title"><div class="dialog-head"><h2 id="elev-dialog-title">Elevation</h2><button id="elev-close" class="icon-button" aria-label="Close elevation" type="button">×</button></div><div class="elev-scroll"><img id="elev-dialog-img" alt=""></div><p class="elev-hint">Click the drawing to zoom to full size.</p></dialog>
-  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-head"><h2 id="about-title">About the Proposal</h2><button id="about-close" class="icon-button" aria-label="Close about dialog" type="button">×</button></div><p>Poorna Market is an urban-level design proposal. The aerial view and street scenes illustrate a connected market experience in a broadly Indian context.</p><p>The five map points indicate approximate design zones, not surveyed coordinates. Images are design visualizations rather than photographs of a completed place; measured dimensions and performance claims await verified drawings.</p><p>The 360° tour presents ten interpretive standing points, two in each zone. Select an arrow to jump between them in a browser or compatible WebXR headset. They show design intent, not a surveyed route or photographic site documentation.</p></dialog>
-  <div id="vr-shell" class="vr-shell" role="dialog" aria-modal="true" aria-label="Poorna Market immersive tour" aria-hidden="true">
-    <div class="tour-stage" id="tour-stage">
-      <span class="tour-image-label">360° design visualization · conceptual route</span>
-      <div id="tour-load" class="tour-load" role="status" aria-live="polite" hidden>Loading location…</div>
-      <div id="tour-error" class="tour-error" role="alert" hidden><p>This panorama could not load.</p><button id="tour-retry" type="button">Retry panorama</button><button id="tour-error-next" type="button">Return to overview</button></div>
+      <p class="stage-help">Drag to orbit · scroll or pinch to zoom · right-drag to pan</p>
     </div>
-    <div class="tour-top"><div class="tour-brand"><strong>Poorna Market</strong><span>Urban design proposal · immersive tour</span></div><div class="tour-top-actions"><button id="vr-headset" type="button">Enter Headset</button><button id="vr-close" type="button">Back to Bird’s-Eye View</button></div></div>
-    <aside class="tour-info" id="tour-info" aria-labelledby="tour-title"><div class="tour-info-top"><span id="tour-index"></span><button id="tour-info-toggle" type="button" aria-expanded="true" aria-controls="tour-info-body">Hide Notes</button></div><div id="tour-info-body"><h2 id="tour-title"></h2><p id="tour-description"></p><div class="tour-intention"><span id="tour-point-name"></span><p id="tour-feature"></p></div><div class="tour-detail-nav"><button id="tour-main-view" type="button" aria-pressed="true">Panorama</button><button id="tour-detail-view" type="button" aria-pressed="false">Detail Study</button></div><div id="tour-study" class="tour-study" hidden><img id="tour-study-image" alt=""><p id="tour-detail-caption" class="tour-detail-caption"></p></div><div id="tour-links" class="tour-links" aria-label="Connected standing points"></div></div></aside>
-    <div class="tour-plan" id="tour-plan"><img src="assets/aerial.webp" width="1536" height="1024" alt="" aria-hidden="true"><div id="tour-plan-points"></div><span>Standing point · illustrative plan</span></div>
-    <div class="tour-view-controls" aria-label="Panorama view controls"><button id="tour-reset" type="button">Reset view</button><button id="tour-zoom-in" type="button" aria-label="Zoom in">+</button><span id="tour-zoom-value">75°</span><button id="tour-zoom-out" type="button" aria-label="Zoom out">−</button></div>
-    <div class="tour-bottom"><p class="tour-help">Drag or touch to turn · Select an arrow to move · Arrow keys turn · R resets</p><nav id="vr-places" class="tour-places" aria-label="Tour locations"></nav></div>
-    <div id="vr-toast" class="tour-toast" role="status" aria-live="polite"></div>
-    <a-scene id="vr-scene" embedded vr-mode-ui="enabled: false" renderer="colorManagement: true; antialias: true" loading-screen="enabled: false" background="color: #F2EFE6">
-      <a-sky id="vr-base-sky" color="#202722"></a-sky>
-      <a-entity id="vr-gallery"></a-entity>
-      <a-entity id="vr-rig" position="0 0 0"><a-camera id="vr-camera" position="0 1.65 0" camera="fov: 75" look-controls wasd-controls="enabled: false"><a-cursor raycaster="objects: .vr-control; far: 12" fuse="false" color="#E6AA30" geometry="radiusInner: 0.006; radiusOuter: 0.012"></a-cursor></a-camera><a-entity cursor="rayOrigin: mouse" raycaster="objects: .vr-control; far: 12"></a-entity><a-entity id="vr-left-hand" laser-controls="hand: left" raycaster="objects: .vr-control; far: 12"></a-entity><a-entity id="vr-right-hand" laser-controls="hand: right" raycaster="objects: .vr-control; far: 12"></a-entity></a-entity>
-    </a-scene>
   </div>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <span class="kicker">Poorna Market · Visakhapatnam</span>
+        <h1 id="hero-title">A breathable <em>bazaar</em>.</h1>
+        <p>A proposal for the city’s oldest market: open edges, shaded lanes, a planted roof, and a street of hawkers that runs straight into the market.</p>
+        <div class="hero-actions">
+          <a class="btn btn-sun" href="#concept">Explore in 3D <span aria-hidden="true">↓</span></a>
+          <a class="btn btn-ghost" href="tour.html?zone=entrance&amp;view=tour">Take the 360° tour <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#concept" aria-label="Scroll to the story"><span></span></a>
+    </section>
+
+    <div class="story" id="story">
+      <section class="chapter" id="concept" data-view="concept" aria-labelledby="c-concept">
+        <span class="chapter-num">01</span>
+        <h2 id="c-concept">The idea</h2>
+        <p class="lead">Poorna Market works because it is open. You can read the lanes at a glance, find shade where you want to linger, and goods spill right up to the street. The proposal keeps that spirit and lets the building breathe with it.</p>
+        <ol class="principles">
+          <li><span class="dot d1" aria-hidden="true">1</span><div><h3>Open edges</h3><p>Stalls, steps and thresholds meet the street, so the market reads as part of the city, not a wall against it.</p></div></li>
+          <li><span class="dot d2" aria-hidden="true">2</span><div><h3>Shaded, airy routes</h3><p>Covered lanes and a central plaza give people places to pause and room for air and light to move through.</p></div></li>
+          <li><span class="dot d3" aria-hidden="true">3</span><div><h3>Planted layers</h3><p>Green terraces and the planted roof soften the building and lift a garden above the market.</p></div></li>
+        </ol>
+      </section>
+
+      <section class="chapter chapter-pink" id="entrance" data-view="entrance" aria-labelledby="c-entrance">
+        <span class="chapter-num">02</span>
+        <h2 id="c-entrance">The side entrance</h2>
+        <p class="lead">A brick gateway with a woven shade canopy and a marigold toran opens the market onto the hawker street. The forecourt in front is a place to arrive, meet and spill out, not just a doorway.</p>
+        <ul class="facts">
+          <li><strong>Brick piers</strong> echo the market’s existing brickwork.</li>
+          <li><strong>Woven canopy</strong> shades the threshold and lets air through.</li>
+          <li><strong>Planted forecourt</strong> with trees on either side of the gate.</li>
+        </ul>
+      </section>
+
+      <section class="chapter chapter-sun" id="street" data-view="street" aria-labelledby="c-street">
+        <span class="chapter-num">03</span>
+        <h2 id="c-street">The hawker street</h2>
+        <p class="lead">The side road becomes a pedestrian bazaar. Produce stalls line the market edge, push-carts with umbrellas sit in the middle, and the shophouses opposite keep their open fronts, signboards and balconies, all strung together with festival bunting.</p>
+        <div class="street-legend" aria-label="What you can see on the street">
+          <span><i style="background:#e3432b"></i>Produce stalls</span><span><i style="background:#2a6fdb"></i>Push-carts</span><span><i style="background:#0e7c86"></i>Shopfront awnings</span><span><i style="background:#c9673f"></i>Paved lane</span>
+        </div>
+        <p class="note">Shops, stalls and people are an illustrative context model added to the proposal, not a survey of the existing street.</p>
+      </section>
+
+      <section class="chapter" id="zones" data-view="zones" aria-labelledby="c-zones">
+        <span class="chapter-num">04</span>
+        <h2 id="c-zones">Five places to explore</h2>
+        <p class="lead">Step inside the proposal through the concept renders. Each one opens the walkthrough, and from there you can enter the 360° tour.</p>
+        <div class="zone-grid" id="zone-grid"></div>
+      </section>
+
+      <section class="chapter" id="drawings" data-view="drawings" aria-labelledby="c-drawings">
+        <span class="chapter-num">05</span>
+        <h2 id="c-drawings">Drawings</h2>
+        <p class="lead">The front elevation, taken from the project drawings. Select it to view full size.</p>
+        <figure class="drawing"><button type="button" class="drawing-open" data-src="assets/elevations/front.webp" data-title="Front elevation" aria-label="Open the front elevation full size"><img src="assets/elevations/front.webp" width="3514" height="1090" loading="lazy" alt="Front elevation of the Poorna Market building: a patterned screen on the left, stepped terraces in the middle, and mural panels with the Poorna Market sign on the right"></button><figcaption>Front elevation</figcaption></figure>
+      </section>
+
+      <section class="chapter chapter-ink" id="about" data-view="about" aria-labelledby="c-about">
+        <span class="chapter-num">06</span>
+        <h2 id="c-about">About the proposal</h2>
+        <dl class="spec">
+          <div><dt>Site</dt><dd>Poorna Market, One Town, Visakhapatnam</dd></div>
+          <div><dt>Scale</dt><dd>Urban-level market design proposal</dd></div>
+          <div><dt>Programme</dt><dd>Produce, textiles and small retail, plaza, planted roof</dd></div>
+          <div><dt>Public realm</dt><dd>Side entrance, hawker street, shaded routes, central plaza</dd></div>
+        </dl>
+        <p class="note">The 3D model is converted from the project’s SketchUp file and simplified for the web. Renders and the 360° tour are design visualizations, not photographs. Zone positions are approximate, and environmental performance has not been measured.</p>
+        <a class="btn btn-sun" href="tour.html?zone=entrance&amp;view=tour">Enter the 360° tour <span aria-hidden="true">↗</span></a>
+      </section>
+
+      <footer class="footer"><span>Poorna Market · A breathable bazaar</span><span>Urban design proposal, Visakhapatnam</span></footer>
+    </div>
+  </main>
+
+  <dialog id="drawing-dialog" aria-labelledby="drawing-title">
+    <div class="dialog-head"><h2 id="drawing-title">Drawing</h2><button id="drawing-close" class="icon-button" type="button" aria-label="Close drawing">×</button></div>
+    <div class="dialog-scroll"><img id="drawing-img" alt=""></div>
+    <p class="dialog-hint">Click the drawing to zoom to full size.</p>
+  </dialog>
 </body>
 </html>

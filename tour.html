@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#202722">
+  <meta name="description" content="Explore the Poorna Market urban design proposal from above and at street level.">
+  <title>Poorna Market | An Urban Design Walkthrough</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anek:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=6">
+  <script defer src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+  <script defer src="app.js?v=6"></script>
+  <script defer src="tour360.js?v=4"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to market map</a>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Poorna Market, back to the 3D site">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M3 22h26M6 22V12l10-7 10 7v10M10 22v-8h12v8M12 14v-3h8v3"/></svg></span>
+      <span><strong>Poorna Market</strong><small>Urban design proposal</small></span>
+    </a>
+    <nav class="top-nav" aria-label="Main navigation"><a href="#locations">Locations</a><button id="about-open" class="text-button" type="button">About the proposal</button></nav>
+  </header>
+  <main id="main">
+    <section id="overview" class="overview" aria-labelledby="overview-title">
+      <div class="section-head"><div><h1 id="overview-title">Explore Poorna Market</h1><p>Hover over a marker to discover a place. Tap a marker on mobile.</p></div><span class="view-tag">Bird’s-eye view</span></div>
+      <div class="overview-layout">
+        <div id="map-frame" class="map-frame"><div class="map-image-region"><img class="aerial" src="assets/aerial.webp" width="1536" height="1024" fetchpriority="high" alt="Bird’s-eye design visualization of Poorna Market with a prominent street entrance, internal courtyards, market streets and planted roofs."><div id="map-hotspots" class="map-hotspots" aria-label="Locations on the market plan"></div></div><span class="map-caption">Concept visualization · hotspot positions are illustrative</span></div>
+        <button id="vr-launch" class="vr-launch" type="button">Enter the immersive tour <span aria-hidden="true">↗</span></button>
+        <aside id="place-panel" class="place-panel" aria-labelledby="panel-title" hidden><button id="panel-close" class="panel-close" type="button" aria-label="Close location information">×</button><span id="panel-index" class="panel-index"></span><div id="panel-icon" class="panel-icon" aria-hidden="true"></div><h2 id="panel-title"></h2><p id="panel-description"></p><p id="panel-feature" class="panel-feature"></p><button id="panel-go" class="primary-button" type="button">Go to This Location <span aria-hidden="true">↗</span></button><p class="panel-footnote">A design visualization of the proposal.</p></aside>
+      </div>
+    </section>
+    <section class="intro" aria-labelledby="page-title"><div class="intro-copy"><h2 id="page-title">A market made for the life around it.</h2><p>Explore a proposal for a connected public market, from its city-facing entrance to the shaded streets, shared plaza and planted roof.</p></div><div class="intro-note"><span class="note-line" aria-hidden="true"></span>Start with the bird’s-eye view. Select a point to look closer.</div></section>
+    <section id="walkthrough" class="walkthrough" aria-labelledby="walk-title" hidden>
+      <div class="walk-top"><button id="back-map" class="back-button" type="button"><span aria-hidden="true">←</span> Back to Bird’s-Eye View</button><span class="view-tag">Street-level scene</span></div>
+      <div class="walk-layout"><div class="walk-image-wrap"><img id="walk-image" src="assets/entrance.webp" width="2172" height="724" alt="Main entrance design visualization"><p id="image-error" role="alert" hidden>We couldn’t load this scene. Return to the bird’s-eye view or choose another location.</p><span class="visualization-label">Design visualization</span></div><div class="walk-info"><span id="walk-index" class="panel-index"></span><h1 id="walk-title"></h1><p id="walk-description"></p><div class="feature-block"><h2>Design intention</h2><p id="walk-feature"></p></div><div class="walk-actions"><button id="prev-place" class="secondary-button" type="button">Previous Location</button><button id="next-place" class="secondary-button" type="button">Next Location</button></div><button id="vr-button" class="vr-button" type="button">Enter the immersive tour <span aria-hidden="true">↗</span></button><p id="vr-status" class="status" role="status" aria-live="polite"></p></div></div>
+    </section>
+    <section id="locations" class="locations" aria-labelledby="locations-title"><div class="section-head"><div><h2 id="locations-title">Five Places to Explore</h2><p>Each view is a proposal image created from the project’s concept renders.</p></div></div><div id="location-list" class="location-list"></div></section>
+    <section class="intentions" aria-labelledby="intentions-title"><div><h2 id="intentions-title">A public place, not just a collection of stalls.</h2><p>The proposal brings market activity and everyday city life together through shaded routes, places to pause, planted edges and a mix of retail experiences.</p></div><div class="intention-list"><h3>Proposal Characteristics</h3><dl><div><dt>Scale</dt><dd>Urban-level market design proposal</dd></div><div><dt>Market program</dt><dd>Produce, textiles and small retail</dd></div><div><dt>Public realm</dt><dd>Street entrance, shaded routes, central plaza and planted roof</dd></div><div><dt>Measured specifications</dt><dd>Awaiting verified project drawings</dd></div></dl></div></section>
+  </main>
+  <footer><span>Poorna Market · Urban design proposal</span><span>Visuals illustrate design intent; dimensions and performance data await verified project drawings.</span></footer>
+  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-head"><h2 id="about-title">About the Proposal</h2><button id="about-close" class="icon-button" aria-label="Close about dialog" type="button">×</button></div><p>Poorna Market is an urban-level design proposal. The aerial view and street scenes illustrate a connected market experience in a broadly Indian context.</p><p>The five map points indicate approximate design zones, not surveyed coordinates. Images are design visualizations rather than photographs of a completed place; measured dimensions and performance claims await verified drawings.</p><p>The 360° tour presents ten interpretive standing points, two in each zone. Select an arrow to jump between them in a browser or compatible WebXR headset. They show design intent, not a surveyed route or photographic site documentation.</p></dialog>
+  <div id="vr-shell" class="vr-shell" role="dialog" aria-modal="true" aria-label="Poorna Market immersive tour" aria-hidden="true">
+    <div class="tour-stage" id="tour-stage">
+      <span class="tour-image-label">360° design visualization · conceptual route</span>
+      <div id="tour-load" class="tour-load" role="status" aria-live="polite" hidden>Loading location…</div>
+      <div id="tour-error" class="tour-error" role="alert" hidden><p>This panorama could not load.</p><button id="tour-retry" type="button">Retry panorama</button><button id="tour-error-next" type="button">Return to overview</button></div>
+    </div>
+    <div class="tour-top"><div class="tour-brand"><strong>Poorna Market</strong><span>Urban design proposal · immersive tour</span></div><div class="tour-top-actions"><button id="vr-headset" type="button">Enter Headset</button><button id="vr-close" type="button">Back to Bird’s-Eye View</button></div></div>
+    <aside class="tour-info" id="tour-info" aria-labelledby="tour-title"><div class="tour-info-top"><span id="tour-index"></span><button id="tour-info-toggle" type="button" aria-expanded="true" aria-controls="tour-info-body">Hide Notes</button></div><div id="tour-info-body"><h2 id="tour-title"></h2><p id="tour-description"></p><div class="tour-intention"><span id="tour-point-name"></span><p id="tour-feature"></p></div><div class="tour-detail-nav"><button id="tour-main-view" type="button" aria-pressed="true">Panorama</button><button id="tour-detail-view" type="button" aria-pressed="false">Detail Study</button></div><div id="tour-study" class="tour-study" hidden><img id="tour-study-image" alt=""><p id="tour-detail-caption" class="tour-detail-caption"></p></div><div id="tour-links" class="tour-links" aria-label="Connected standing points"></div></div></aside>
+    <div class="tour-plan" id="tour-plan"><img src="assets/aerial.webp" width="1536" height="1024" alt="" aria-hidden="true"><div id="tour-plan-points"></div><span>Standing point · illustrative plan</span></div>
+    <div class="tour-view-controls" aria-label="Panorama view controls"><button id="tour-reset" type="button">Reset view</button><button id="tour-zoom-in" type="button" aria-label="Zoom in">+</button><span id="tour-zoom-value">75°</span><button id="tour-zoom-out" type="button" aria-label="Zoom out">−</button></div>
+    <div class="tour-bottom"><p class="tour-help">Drag or touch to turn · Select an arrow to move · Arrow keys turn · R resets</p><nav id="vr-places" class="tour-places" aria-label="Tour locations"></nav></div>
+    <div id="vr-toast" class="tour-toast" role="status" aria-live="polite"></div>
+    <a-scene id="vr-scene" embedded vr-mode-ui="enabled: false" renderer="colorManagement: true; antialias: true" loading-screen="enabled: false" background="color: #F2EFE6">
+      <a-sky id="vr-base-sky" color="#202722"></a-sky>
+      <a-entity id="vr-gallery"></a-entity>
+      <a-entity id="vr-rig" position="0 0 0"><a-camera id="vr-camera" position="0 1.65 0" camera="fov: 75" look-controls wasd-controls="enabled: false"><a-cursor raycaster="objects: .vr-control; far: 12" fuse="false" color="#E6AA30" geometry="radiusInner: 0.006; radiusOuter: 0.012"></a-cursor></a-camera><a-entity cursor="rayOrigin: mouse" raycaster="objects: .vr-control; far: 12"></a-entity><a-entity id="vr-left-hand" laser-controls="hand: left" raycaster="objects: .vr-control; far: 12"></a-entity><a-entity id="vr-right-hand" laser-controls="hand: right" raycaster="objects: .vr-control; far: 12"></a-entity></a-entity>
+    </a-scene>
+  </div>
+</body>
+</html>
